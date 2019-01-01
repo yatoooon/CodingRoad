@@ -3,8 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/CodingRoad.iml" filepath="$PROJECT_DIR$/CodingRoad.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/CodingRoad.iml" filepath="$PROJECT_DIR$/.idea/CodingRoad.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/baselibrary/baselibrary.iml" filepath="$PROJECT_DIR$/baselibrary/baselibrary.iml" />
+      <module fileurl="file://$PROJECT_DIR$/rxjava/rxjava.iml" filepath="$PROJECT_DIR$/rxjava/rxjava.iml" />
     </modules>
   </component>
 </project>
