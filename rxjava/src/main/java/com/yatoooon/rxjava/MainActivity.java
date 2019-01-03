@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import io.reactivex.*;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.BiFunction;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
@@ -30,7 +31,18 @@ public class MainActivity extends AppCompatActivity {
                 emitter.onNext(3);
                 emitter.onComplete();
             }
-        });
+        }).subscribeOn(Schedulers.newThread());
+
+        //被观察者2
+        Observable<Integer> observable2 = Observable.create(new ObservableOnSubscribe<Integer>() {
+            @Override
+            public void subscribe(ObservableEmitter<Integer> emitter) throws Exception {
+                for (int i = 0; i < 10; i++) {
+                    emitter.onNext(i);
+                }
+                emitter.onComplete();
+            }
+        }).subscribeOn(Schedulers.newThread());
 
 
         //中间节点
@@ -80,12 +92,12 @@ public class MainActivity extends AppCompatActivity {
          * */
 
 
-        //最基本的一些规则
-        //1 上游可以发送无限个onNext   下游可以接受无限个onNext
-        //2 当上游发送了一个onComplete后, 上游onComplete之后的事件将会继续发送, 而下游收到onComplete事件之后将不再继续接收事件.
-        //3 当上游发送了一个onError后, 上游onError之后的事件将继续发送, 而下游收到onError事件之后将不再继续接收事件.
-        //4 上游可以不发送onComplete或onError.
-        //5 最为关键的是onComplete和onError必须唯一并且互斥, 即不能发多个onComplete, 也不能发多个onError, 也不能先发一个onComplete, 然后再发一个onError, 反之亦然
+//        最基本的一些规则
+//        1 上游可以发送无限个onNext   下游可以接受无限个onNext
+//        2 当上游发送了一个onComplete后, 上游onComplete之后的事件将会继续发送, 而下游收到onComplete事件之后将不再继续接收事件.
+//        3 当上游发送了一个onError后, 上游onError之后的事件将继续发送, 而下游收到onError事件之后将不再继续接收事件.
+//        4 上游可以不发送onComplete或onError.
+//        5 最为关键的是onComplete和onError必须唯一并且互斥, 即不能发多个onComplete, 也不能发多个onError, 也不能先发一个onComplete, 然后再发一个onError, 反之亦然
 
 
         //subscribe有多个重载的方法   如果想简单的写个接受的方法   用Consumer
@@ -97,17 +109,44 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        //操作符flatmap   flatMap将一个发射数据的Observable变换为多个Observables，然后将它们发射的数据合并后放进一个单独的Observable。
+        //操作符flatmap   flatMap将一个发射数据的Observable变换为多个Observables，然后将它们发射的数据合并后放进一个单独的Observable。  无序的
+        //简单的来说  就是将一个Observable转换为另一个Observable
         observable.flatMap(new Function<Integer, ObservableSource<String>>() {
+
             @Override
             public ObservableSource<String> apply(Integer integer) throws Exception {
                 final ArrayList<String> list = new ArrayList<>();
-                list.add(String.valueOf(integer));
-                list.add(String.valueOf(integer));
-                list.add(String.valueOf(integer));
+                for (int i = 0; i < 10; i++) {
+                    list.add(String.valueOf(integer));
+                }
                 return Observable.fromIterable(list).delay(50, TimeUnit.MILLISECONDS);
             }
         }).subscribe(observer);
+
+        //操作符concatMap   flatMap将一个发射数据的Observable变换为多个Observables，然后将它们发射的数据合并后放进一个单独的Observable。严格按照上游发送的顺序来发送
+        observable.concatMap(new Function<Integer, ObservableSource<String>>() {
+
+            @Override
+            public ObservableSource<String> apply(Integer integer) throws Exception {
+                final ArrayList<String> list = new ArrayList<>();
+                for (int i = 0; i < 10; i++) {
+                    list.add(String.valueOf(integer));
+                }
+                return Observable.fromIterable(list);
+            }
+        }).subscribe(observer);
+
+
+        //操作符zip  通过一个函数将多个Observable发送的事件结合到一起，然后发送这些组合到一起的事件. 它按照严格的顺序应用这个函数。它只发射与发射数据项最少的那个Observable一样多的数据。   两个observable在一个线程的话会按先后顺序发送
+        Observable.zip(observable.subscribeOn(Schedulers.newThread()), observable2.subscribeOn(Schedulers.newThread()), new BiFunction<Integer, Integer, String>() {
+            @Override
+            public String apply(Integer integer, Integer integer2) throws Exception {
+                return String.valueOf(integer + "zip操作符" + integer);
+            }
+        }).subscribe(observer);
+
+
+
 
 
     }
