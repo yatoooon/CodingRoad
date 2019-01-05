@@ -1,5 +1,6 @@
 package com.yatoooon.rxjava;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import io.reactivex.*;
@@ -16,6 +17,11 @@ import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
 
+    private Observable<Integer> observable;
+    private Observable<Integer> observable2;
+    private Function<Integer, String> function;
+    private Observer<String> observer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         //被观察者
-        Observable<Integer> observable = Observable.create(new ObservableOnSubscribe<Integer>() {
+        observable = Observable.create(new ObservableOnSubscribe<Integer>() {
             @Override
             public void subscribe(ObservableEmitter<Integer> emitter) throws Exception {
                 emitter.onNext(1);
@@ -34,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         }).subscribeOn(Schedulers.newThread());
 
         //被观察者2
-        Observable<Integer> observable2 = Observable.create(new ObservableOnSubscribe<Integer>() {
+        observable2 = Observable.create(new ObservableOnSubscribe<Integer>() {
             @Override
             public void subscribe(ObservableEmitter<Integer> emitter) throws Exception {
                 for (int i = 0; i < 10; i++) {
@@ -46,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         //中间节点
-        Function<Integer, String> function = new Function<Integer, String>() {
+        function = new Function<Integer, String>() {
             @Override
             public String apply(Integer integer) throws Exception {
                 return String.valueOf(integer);
@@ -55,7 +61,8 @@ public class MainActivity extends AppCompatActivity {
 
 
         //观察者
-        Observer<String> observer = new Observer<String>() {
+        //Disposable 用于断开上下游的链接  导致观察者收不到事件 并不影响上游发送事件    用法:例如在退出activity的时候切断链条 不会再更新UI
+        observer = new Observer<String>() {
             @Override
             public void onSubscribe(Disposable d) {  //Disposable 用于断开上下游的链接  导致观察者收不到事件 并不影响上游发送事件    用法:例如在退出activity的时候切断链条 不会再更新UI
                 Timber.d("onSubscribe");
@@ -77,14 +84,6 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        //观察者订阅被观察者    看起来有些别扭    但是确实是后面的observer 观察 observable
-        observable
-                .subscribeOn(Schedulers.newThread())      //控制上游线程    写到哪都无所谓,多次指定只有第一次有效
-                .observeOn(AndroidSchedulers.mainThread())   //切换下游线程   每次指定都会切换一次下游线程
-                .map(function)        //最简单的操作符map    将上游发送的每个Integer转换为了下游需要的String
-                .subscribe(observer);
-
-
 
         /* 整体看做是一条链
          * 链的 上游是Observable  下游是Observer   中间节点既是上游也是下游
@@ -100,15 +99,74 @@ public class MainActivity extends AppCompatActivity {
 //        5 最为关键的是onComplete和onError必须唯一并且互斥, 即不能发多个onComplete, 也不能发多个onError, 也不能先发一个onComplete, 然后再发一个onError, 反之亦然
 
 
-        //subscribe有多个重载的方法   如果想简单的写个接受的方法   用Consumer
-        Disposable disposable = observable.subscribe(new Consumer<Integer>() {
-            @Override
-            public void accept(Integer integer) throws Exception {
+        setExample1();   //最简单的
+        setExample2();   //单一接受的方法
+        setExample3();   //flatmap
+        setExample4();   //concatMap
+        setExample5();   //zip
+        setExample6();   //Backpressure
 
+
+    }
+
+    @SuppressLint("CheckResult")
+    private void setExample6() {
+        Observable<Integer> observable1 = Observable.create(new ObservableOnSubscribe<Integer>() {
+            @Override
+            public void subscribe(ObservableEmitter<Integer> emitter) throws Exception {
+                for (int i = 0; ; i++) {   //无限循环发事件
+                    emitter.onNext(i);
+                }
+            }
+        }).subscribeOn(Schedulers.io());
+
+
+        Observable.zip(observable, observable1, new BiFunction<Integer, Integer, String>() {
+            @Override
+            public String apply(Integer integer, Integer integer2) throws Exception {
+                return integer + "      " + integer2;
+            }
+        }).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<String>() {
+            @Override
+            public void accept(String s) throws Exception {
+                Timber.d(s);
+            }
+        }, new Consumer<Throwable>() {
+            @Override
+            public void accept(Throwable throwable) throws Exception {
+                Timber.d(throwable);
             }
         });
 
 
+    }
+
+    private void setExample5() {
+        //操作符zip  通过一个函数将多个Observable发送的事件结合到一起，然后发送这些组合到一起的事件. 它按照严格的顺序应用这个函数。它只发射与发射数据项最少的那个Observable一样多的数据。   两个observable在一个线程的话会按先后顺序发送
+        Observable.zip(observable.subscribeOn(Schedulers.newThread()), observable2.subscribeOn(Schedulers.newThread()), new BiFunction<Integer, Integer, String>() {
+            @Override
+            public String apply(Integer integer, Integer integer2) throws Exception {
+                return String.valueOf(integer + "zip操作符" + integer);
+            }
+        }).subscribe(observer);
+    }
+
+    private void setExample4() {
+        //操作符concatMap   flatMap将一个发射数据的Observable变换为多个Observables，然后将它们发射的数据合并后放进一个单独的Observable。严格按照上游发送的顺序来发送
+        observable.concatMap(new Function<Integer, ObservableSource<String>>() {
+
+            @Override
+            public ObservableSource<String> apply(Integer integer) throws Exception {
+                final ArrayList<String> list = new ArrayList<>();
+                for (int i = 0; i < 10; i++) {
+                    list.add(String.valueOf(integer));
+                }
+                return Observable.fromIterable(list);
+            }
+        }).subscribe(observer);
+    }
+
+    private void setExample3() {
         //操作符flatmap   flatMap将一个发射数据的Observable变换为多个Observables，然后将它们发射的数据合并后放进一个单独的Observable。  无序的
         //简单的来说  就是将一个Observable转换为另一个Observable
         observable.flatMap(new Function<Integer, ObservableSource<String>>() {
@@ -122,32 +180,29 @@ public class MainActivity extends AppCompatActivity {
                 return Observable.fromIterable(list).delay(50, TimeUnit.MILLISECONDS);
             }
         }).subscribe(observer);
+    }
 
-        //操作符concatMap   flatMap将一个发射数据的Observable变换为多个Observables，然后将它们发射的数据合并后放进一个单独的Observable。严格按照上游发送的顺序来发送
-        observable.concatMap(new Function<Integer, ObservableSource<String>>() {
-
+    @SuppressLint("CheckResult")
+    private void setExample2() {
+        //subscribe有多个重载的方法   如果想简单的写个接受的方法   用Consumer
+        observable.subscribe(new Consumer<Integer>() {
             @Override
-            public ObservableSource<String> apply(Integer integer) throws Exception {
-                final ArrayList<String> list = new ArrayList<>();
-                for (int i = 0; i < 10; i++) {
-                    list.add(String.valueOf(integer));
-                }
-                return Observable.fromIterable(list);
+            public void accept(Integer integer) throws Exception {
+
             }
-        }).subscribe(observer);
+        });
 
 
-        //操作符zip  通过一个函数将多个Observable发送的事件结合到一起，然后发送这些组合到一起的事件. 它按照严格的顺序应用这个函数。它只发射与发射数据项最少的那个Observable一样多的数据。   两个observable在一个线程的话会按先后顺序发送
-        Observable.zip(observable.subscribeOn(Schedulers.newThread()), observable2.subscribeOn(Schedulers.newThread()), new BiFunction<Integer, Integer, String>() {
-            @Override
-            public String apply(Integer integer, Integer integer2) throws Exception {
-                return String.valueOf(integer + "zip操作符" + integer);
-            }
-        }).subscribe(observer);
+    }
 
+    private void setExample1() {
 
-
-
+        //观察者订阅被观察者    看起来有些别扭    但是确实是后面的observer 观察 observable
+        observable
+                .subscribeOn(Schedulers.newThread())      //控制上游线程    写到哪都无所谓,多次指定只有第一次有效
+                .observeOn(AndroidSchedulers.mainThread())   //切换下游线程   每次指定都会切换一次下游线程
+                .map(function)        //最简单的操作符map    将上游发送的每个Integer转换为了下游需要的String
+                .subscribe(observer);
 
     }
 }
