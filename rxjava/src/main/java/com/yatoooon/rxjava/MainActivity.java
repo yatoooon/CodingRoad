@@ -10,6 +10,8 @@ import io.reactivex.functions.BiFunction;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
+import org.reactivestreams.Subscriber;
+import org.reactivestreams.Subscription;
 import timber.log.Timber;
 
 import java.util.ArrayList;
@@ -99,12 +101,53 @@ public class MainActivity extends AppCompatActivity {
 //        5 最为关键的是onComplete和onError必须唯一并且互斥, 即不能发多个onComplete, 也不能发多个onError, 也不能先发一个onComplete, 然后再发一个onError, 反之亦然
 
 
-        setExample1();   //最简单的
-        setExample2();   //单一接受的方法
-        setExample3();   //flatmap
-        setExample4();   //concatMap
-        setExample5();   //zip
-        setExample6();   //Backpressure
+//        setExample1();   //最简单的
+//        setExample2();   //单一接受的方法
+//        setExample3();   //flatmap
+//        setExample4();   //concatMap
+//        setExample5();   //zip
+//        setExample6();   //引入Backpressure
+        setExample7();   //Flowable
+
+
+    }
+
+    private void setExample7() {
+
+        Flowable.create(new FlowableOnSubscribe<Integer>() {
+            @Override
+            public void subscribe(FlowableEmitter<Integer> emitter) throws Exception {
+                emitter.onNext(1);
+                emitter.onNext(2);
+                emitter.onNext(3);
+                emitter.onComplete();
+            }
+        }, BackpressureStrategy.ERROR)  //选这个参数会在上下游不均衡的时候抛出MissingBackpressureException异常  BackpressureStrategy.BUFFER//
+                .subscribe(new Subscriber<Integer>() {
+                    @Override
+                    public void onSubscribe(Subscription s) {
+                        //下游的处理能力默认128
+                        //没有这句话  在同步会抛出MissingBackpressureException   在异步不会抛异常但是上游发送的所有事件下游一个也没有收到  因为下游没有表明处理能力
+                        //每调用一次就请求一下
+                        s.request(Long.MAX_VALUE);
+
+                    }
+
+                    @Override
+                    public void onNext(Integer integer) {
+                        Timber.d("onNext" + String.valueOf(integer));
+                    }
+
+                    @Override
+                    public void onError(Throwable t) {
+                        Timber.d(t);
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
 
 
     }
@@ -116,12 +159,22 @@ public class MainActivity extends AppCompatActivity {
             public void subscribe(ObservableEmitter<Integer> emitter) throws Exception {
                 for (int i = 0; ; i++) {   //无限循环发事件
                     emitter.onNext(i);
+                    Thread.sleep(2000);  //发送事件之后延时2秒    1 从速度上进行治理, 减缓事件发送进水缸的速度
                 }
             }
         }).subscribeOn(Schedulers.io());
 
+        Observable<Integer> observable2 = Observable.create(new ObservableOnSubscribe<Integer>() {
+            @Override
+            public void subscribe(ObservableEmitter<Integer> emitter) throws Exception {
+                for (int i = 0; ; i++) {   //无限循环发事件
+                    emitter.onNext(i);
+                }
+            }
+        }).subscribeOn(Schedulers.io()).sample(2, TimeUnit.SECONDS);  //2是从数量上进行治理, 减少发送进水缸里的事件
 
-        Observable.zip(observable, observable1, new BiFunction<Integer, Integer, String>() {
+
+        Observable.zip(observable1, observable2, new BiFunction<Integer, Integer, String>() {
             @Override
             public String apply(Integer integer, Integer integer2) throws Exception {
                 return integer + "      " + integer2;
@@ -131,12 +184,13 @@ public class MainActivity extends AppCompatActivity {
             public void accept(String s) throws Exception {
                 Timber.d(s);
             }
-        }, new Consumer<Throwable>() {
-            @Override
-            public void accept(Throwable throwable) throws Exception {
-                Timber.d(throwable);
-            }
         });
+
+
+        //1 上下游在同一个线程时  同步订阅关系   上游发一个 等下游收一个处理完了  上游才接着发
+        //2  上下游不在同一个线程时   异步订阅关系    上游不等下游处理   直接发        引出  背压 Flowable等概念
+
+        //手工解决的办法有两个  如上
 
 
     }
