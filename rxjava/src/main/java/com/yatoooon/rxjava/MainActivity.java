@@ -117,12 +117,24 @@ public class MainActivity extends AppCompatActivity {
         Flowable.create(new FlowableOnSubscribe<Integer>() {
             @Override
             public void subscribe(FlowableEmitter<Integer> emitter) throws Exception {
+                //上游获取下游的处理能力
+                // 当上下游在同一个线程中的时候，在下游调用request(n)就会直接改变上游中的requested的值，多次调用便会叠加这个值，而上游每发送一个事件之后便会去减少这个值，当这个值减少至0的时候，继续发送事件便会抛异常
+                // 当上下游工作在不同的线程里时，每一个线程里都有一个requested，而我们调用request（1000）时，实际上改变的是下游主线程中的requested，而上游中的requested的值是由RxJava内部调用request(96)去设置的，这个调用会在合适的时候自动触发。
+                //在某一些场景下，可以在发送事件前先判断当前的requested的值是否大于0，若等于0则说明下游处理不过来了，则需要等待
+                Timber.d("current requested: %s", emitter.requested());
+
+
                 emitter.onNext(1);
                 emitter.onNext(2);
                 emitter.onNext(3);
                 emitter.onComplete();
             }
-        }, BackpressureStrategy.ERROR)  //选这个参数会在上下游不均衡的时候抛出MissingBackpressureException异常  BackpressureStrategy.BUFFER//
+            //选这个参数会在上下游不均衡的时候抛出MissingBackpressureException异常
+            //BackpressureStrategy.BUFFER 更大的缓冲区  onBackpressureBuffer()
+            //ackpressureStrategy.DROP 把存不下的事件丢弃 onBackpressureDrop()
+            //BackpressureStrategy.LATEST 只保留最新的事件 onBackpressureLatest()
+        }, BackpressureStrategy.ERROR)
+                .onBackpressureBuffer()//对于不是自己创建的FLowable  可以调用对应的方法来实现相应的策略
                 .subscribe(new Subscriber<Integer>() {
                     @Override
                     public void onSubscribe(Subscription s) {
