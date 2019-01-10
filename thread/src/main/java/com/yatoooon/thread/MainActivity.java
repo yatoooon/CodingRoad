@@ -33,13 +33,14 @@ public class MainActivity extends AppCompatActivity {
     private int l = 0;
 
     ReentrantReadWriteLock readWriteLock = new ReentrantReadWriteLock();
-    Lock readLock = readWriteLock.readLock();
-    Lock writeLock = readWriteLock.writeLock();
+    Lock readLock = readWriteLock.readLock();     //资源没有被写锁占有的情况下   可以有多个线程一起读
+    Lock writeLock = readWriteLock.writeLock();   //在没有读锁的情况下  可以一个线程进行写
 
     private void count() {
         writeLock.lock();
         try {
-            x++;
+            l++;
+            Timber.d("wirte "+l);
         } finally {
             writeLock.unlock();
         }
@@ -49,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
         readLock.lock();
         try {
             for (int i = 0; i < time; i++) {
-                Timber.d("print" + x);
+                Timber.d("print" + l);
             }
         } finally {
             readLock.unlock();
@@ -65,6 +66,31 @@ public class MainActivity extends AppCompatActivity {
         } finally {
             lock.unlock();
         }
+        new Thread() {
+            @Override
+            public void run() {
+                for (int i = 0; i < 100000; i++) {
+                    count();
+                }
+                Timber.d("wirte end"+l);
+            }
+        }.start();
+
+        new Thread() {
+            @Override
+            public void run() {
+                print(100000);
+                Timber.d("print1 end");
+            }
+        }.start();
+
+        new Thread() {
+            @Override
+            public void run() {
+                print(100000);
+                Timber.d("print2 end");
+            }
+        }.start();
     }
 
     volatile int v = 0;
