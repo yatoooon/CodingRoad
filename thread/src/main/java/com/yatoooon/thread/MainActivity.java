@@ -33,14 +33,14 @@ public class MainActivity extends AppCompatActivity {
     private int l = 0;
 
     ReentrantReadWriteLock readWriteLock = new ReentrantReadWriteLock();
-    Lock readLock = readWriteLock.readLock();     //资源没有被写锁占有的情况下   可以有多个线程一起读
-    Lock writeLock = readWriteLock.writeLock();   //在没有读锁的情况下  可以一个线程进行写
+    Lock readLock = readWriteLock.readLock();     //资源没有被写锁占有的情况下   可以有多个线程一起读  不能写
+    Lock writeLock = readWriteLock.writeLock();   //在没有读锁的情况下  可以一个线程进行写  只有这一个线程可以读
 
     private void count() {
         writeLock.lock();
         try {
             l++;
-            Timber.d("wirte "+l);
+            Timber.d("wirte " + l);
         } finally {
             writeLock.unlock();
         }
@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
                 for (int i = 0; i < 100000; i++) {
                     count();
                 }
-                Timber.d("wirte end"+l);
+                Timber.d("wirte end" + l);
             }
         }.start();
 
