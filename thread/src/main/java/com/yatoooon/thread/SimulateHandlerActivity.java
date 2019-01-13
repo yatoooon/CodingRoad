@@ -12,7 +12,6 @@ public class SimulateHandlerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         //Android Handler 机制  :在某个指定的运行中的线程上执行代码.
 
         CustomerThread customerThread = new CustomerThread();
@@ -22,7 +21,7 @@ public class SimulateHandlerActivity extends AppCompatActivity {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
         }
-        customerThread.looper.setTask(new Runnable() {
+        customerThread.handler.post(new Runnable() {
             @Override
             public void run() {
                 Timber.d("在运行中的线程上执行代码了");
@@ -32,17 +31,17 @@ public class SimulateHandlerActivity extends AppCompatActivity {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
         }
-        customerThread.looper.quit();
+        customerThread.handler.quit();
 
     }
 
 
     class CustomerThread extends Thread {
-        Looper looper = new Looper();
+        Handler handler = new Handler();
 
         @Override
         public void run() {
-            looper.loop();
+            handler.looper.loop();
         }
     }
 
@@ -69,6 +68,22 @@ public class SimulateHandlerActivity extends AppCompatActivity {
                 }
                 Timber.d("线程正在运行........");
             }
+        }
+    }
+
+    class Handler {
+        Looper looper;
+
+        Handler() {
+            this.looper = new Looper();
+        }
+
+        void post(Runnable runnable) {
+            looper.setTask(runnable);
+        }
+
+        void quit() {
+            looper.quit();
         }
     }
 }

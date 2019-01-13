@@ -25,8 +25,6 @@ public class MainActivity extends AppCompatActivity {
 //        setExample6();   //引入线程同步  和  monitor
 //        setExample7();   //volatile   AtomicInteger...
         setExample8();    //Lock
-
-
     }
 
 
