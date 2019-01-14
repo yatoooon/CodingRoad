@@ -1,5 +1,6 @@
 package com.yatoooon.thread;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import timber.log.Timber;
@@ -11,6 +12,8 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class MainActivity extends AppCompatActivity {
+
+    private ExecutorService executorService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +27,50 @@ public class MainActivity extends AppCompatActivity {
 //        setExample5();   //Callable Future
 //        setExample6();   //引入线程同步  和  monitor
 //        setExample7();   //volatile   AtomicInteger...
-        setExample8();    //Lock
+//        setExample8();    //Lock
+
+
+        setExample9();    //AsyncTask
+
+
+    }
+
+
+    class MyAsyncTask extends AsyncTask<String, Integer, String> {
+
+
+        @Override
+        protected String doInBackground(String... strings) {
+            for (int i = 0; i < 5; i++) {
+                try {
+                    Thread.sleep(1000);
+                    publishProgress(i);
+                } catch (InterruptedException e) {
+                    Thread.interrupted();
+                }
+            }
+            return "asynctask";
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            Timber.d(result);
+        }
+
+        @Override
+        protected void onPreExecute() {
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+            Timber.d(String.valueOf(values[0]));
+        }
+    }
+
+    private void setExample9() {
+
+        new MyAsyncTask().execute("哈哈哈哈哈");
     }
 
 
@@ -228,7 +274,7 @@ public class MainActivity extends AppCompatActivity {
         int KEEP_ALIVE_TIME = 1;
         TimeUnit KEEP_ALIVE_TIME_UNIT = TimeUnit.SECONDS;
         BlockingQueue<Runnable> taskQueue = new LinkedBlockingQueue<Runnable>();
-        ExecutorService executorService = new ThreadPoolExecutor(
+        executorService = new ThreadPoolExecutor(   //记得去ondestroy里面showdown
                 NUMBER_OF_CORES
                 , NUMBER_OF_CORES * 2
                 , KEEP_ALIVE_TIME
@@ -300,5 +346,12 @@ public class MainActivity extends AppCompatActivity {
                 Timber.d("Thread run");
             }
         }.start();
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        executorService.shutdown();
     }
 }
