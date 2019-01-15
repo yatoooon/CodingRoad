@@ -1,1 +1,1 @@
-include  ':rxjava', ':baselibrary', ':thread'
+include  ':rxjava', ':baselibrary', ':thread', ':customview'
