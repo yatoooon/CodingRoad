@@ -9,6 +9,7 @@ import com.yatoooon.baselibrary.utils.DensityUtil;
 
 public class DashBoardView extends View {
     Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private static final int SCALENUM = 10;
     private static final int RADIUS = DensityUtil.dp2px(100);
     private static final int LENGTH = DensityUtil.dp2px(50);
     private static final float ANGLE = 120;
@@ -30,7 +31,7 @@ public class DashBoardView extends View {
         arc.addArc(getWidth() / 2 - RADIUS, getHeight() / 2 - RADIUS, getWidth() / 2 + RADIUS, getHeight() / 2 + RADIUS, ANGLE / 2 + 90, 360 - ANGLE);
         PathMeasure pathMeasure = new PathMeasure(arc, false);
 
-        dashPathEffect = new PathDashPathEffect(path, (pathMeasure.getLength() - DensityUtil.dp2px(2)) / 10, 0, PathDashPathEffect.Style.ROTATE);
+        dashPathEffect = new PathDashPathEffect(path, (pathMeasure.getLength() - DensityUtil.dp2px(2)) / SCALENUM, 0, PathDashPathEffect.Style.ROTATE);
     }
 
     @Override
@@ -53,7 +54,7 @@ public class DashBoardView extends View {
     }
 
     private int calculatePoint(int point) {
-        return (int) ((360 - ANGLE) / 10 * point + 150);
+        return (int) ((360 - ANGLE) / SCALENUM * point + 150);
     }
 
 
