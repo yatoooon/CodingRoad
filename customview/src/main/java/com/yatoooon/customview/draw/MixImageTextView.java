@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.support.annotation.Nullable;
+import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.view.View;
@@ -31,9 +32,9 @@ public class MixImageTextView extends View {
         super.onDraw(canvas);
 
 
-        //只绘制文字的话用staticlayout 就行
-//        StaticLayout.Builder.obtain(text, 0, text.length(), paint, getWidth()).build().draw(canvas);
+        //只绘制文字的话用staticlayout 就行  图文混排的我的再捋捋
+        StaticLayout.Builder.obtain(text, 0, text.length(), paint, getWidth()).build().draw(canvas);
 
-        
+
     }
 }
