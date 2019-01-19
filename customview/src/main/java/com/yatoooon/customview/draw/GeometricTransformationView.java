@@ -40,7 +40,8 @@ public class GeometricTransformationView extends View {
         //自己写自定义view的话   倒着写    从下往上   依次是    1 绘制  2 移动 3 旋转  4 放缩  5  错切
         //  两次绘制之间  比如两次drawbitmap之间 正着写
 
-
+        canvas.skew(0.5f,0.5f);
+        canvas.scale(0.5f,0.5f);
         canvas.rotate(45, 200, 200);
         canvas.translate(200, 200);
         canvas.drawBitmap(bitmap, 0, 0, paint);
