@@ -5,6 +5,7 @@ import android.graphics.*;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
+import com.yatoooon.baselibrary.utils.BitmapUtil;
 import com.yatoooon.baselibrary.utils.DensityUtil;
 import com.yatoooon.customview.R;
 
@@ -32,18 +33,10 @@ public class AvatarView extends View {
         canvas.drawCircle(getWidth() / 2, getHeight() / 2, RADIUS - EDGE, paint);
         paint.setXfermode(xfermode);
         rect.set(getWidth() / 2 - RADIUS, getHeight() / 2 - RADIUS, getWidth() / 2 + RADIUS, getHeight() / 2 + RADIUS);
-        canvas.drawBitmap(getAvatar(WIDTH), null, rect, paint);
+        canvas.drawBitmap(BitmapUtil.getAvatar(getContext(),R.drawable.head,WIDTH), null, rect, paint);
         paint.setXfermode(null);
         canvas.restoreToCount(saveLayer);
     }
 
-    Bitmap getAvatar(int width) {
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-        BitmapFactory.decodeResource(getResources(), R.drawable.head, options);
-        options.inJustDecodeBounds = false;
-        options.inDensity = options.outWidth;
-        options.inTargetDensity = width;
-        return BitmapFactory.decodeResource(getResources(), R.drawable.head, options);
-    }
+
 }

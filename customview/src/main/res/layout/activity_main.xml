@@ -7,7 +7,7 @@
         android:layout_height="match_parent"
 >
 
-    <com.yatoooon.customview.draw.GeometricTransformationView
+    <com.yatoooon.customview.draw.CameraView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_constraintBottom_toBottomOf="parent"

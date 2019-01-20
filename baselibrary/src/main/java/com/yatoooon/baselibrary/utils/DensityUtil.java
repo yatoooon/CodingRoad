@@ -41,4 +41,8 @@ public class DensityUtil {
         int height = dm.heightPixels;
         return new int[]{width, height};
     }
+
+    public static float getZForCamera() {
+        return -8 * Resources.getSystem().getDisplayMetrics().density;
+    }
 }
