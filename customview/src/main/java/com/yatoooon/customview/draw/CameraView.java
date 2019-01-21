@@ -34,20 +34,27 @@ public class CameraView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         rect.set(getWidth() / 2 - WIDTH, getHeight() / 2 - WIDTH, getWidth() / 2 + WIDTH, getHeight() / 2 + WIDTH);
-        clipPath_top.addRect(getWidth() / 2 - WIDTH, getHeight() / 2 - WIDTH, getWidth() / 2 + WIDTH, getHeight() / 2, Path.Direction.CW);
-        clipPath_bottom.addRect(getWidth() / 2 - WIDTH, getHeight() / 2, getWidth() / 2 + WIDTH, getHeight() / 2 + WIDTH, Path.Direction.CW);
-
+        clipPath_top.addRect(-getWidth(), -getHeight(), getWidth(), 0, Path.Direction.CW);
+        clipPath_bottom.addRect(-getWidth(), 0, getWidth(), getHeight(), Path.Direction.CW);
 
         canvas.save();
+        canvas.translate(getWidth() / 2, getHeight() / 2);
+        canvas.rotate(-20);
         canvas.clipPath(clipPath_top);
-        canvas.drawBitmap(BitmapUtil.getAvatar(getContext(), R.drawable.logo, WIDTH), null, rect, paint);
+        canvas.rotate(20);
+        canvas.translate(-(getWidth() / 2), -(getHeight() / 2));
+        canvas.drawBitmap(BitmapUtil.getAvatar(getContext(), R.drawable.head, WIDTH * 2), null, rect, paint);
         canvas.restore();
 
 
         canvas.save();
+        canvas.translate(getWidth() / 2, getHeight() / 2);
+        canvas.rotate(-20);
         camera.applyToCanvas(canvas);
         canvas.clipPath(clipPath_bottom);
-        canvas.drawBitmap(BitmapUtil.getAvatar(getContext(), R.drawable.logo, WIDTH), null, rect, paint);
+        canvas.rotate(20);
+        canvas.translate(-(getWidth() / 2), -(getHeight() / 2));
+        canvas.drawBitmap(BitmapUtil.getAvatar(getContext(), R.drawable.head, WIDTH * 2), null, rect, paint);
         canvas.restore();
 
     }

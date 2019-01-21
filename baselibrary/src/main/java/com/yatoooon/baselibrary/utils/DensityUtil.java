@@ -43,6 +43,6 @@ public class DensityUtil {
     }
 
     public static float getZForCamera() {
-        return -8 * Resources.getSystem().getDisplayMetrics().density;
+        return -6 * Resources.getSystem().getDisplayMetrics().density;
     }
 }
