@@ -12,7 +12,8 @@ import com.yatoooon.customview.draw.ProvinceView;
 public class MainActivity extends AppCompatActivity {
 
     //    private CameraView view;    //1 2 3
-    private PointView view;       //4
+//    private PointView view;       //4
+    private ProvinceView view;       //5
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +37,8 @@ public class MainActivity extends AppCompatActivity {
     class ProvinceEvaluator implements TypeEvaluator<String> {
         @Override
         public String evaluate(float fraction, String startValue, String endValue) {
-            // 北京市      上海市       fraction 0.5f
+//             fraction 0 - 0.5 - 1f
+//            startValue + (endValue - startValue) * fraction
             int startIndex = ProvinceView.provinces.indexOf(startValue);
             int endIndex = ProvinceView.provinces.indexOf(endValue);
             int index = (int) (startIndex + (endIndex - startIndex) * fraction);
