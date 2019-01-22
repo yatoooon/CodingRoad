@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import com.yatoooon.baselibrary.utils.DensityUtil;
 import com.yatoooon.customview.draw.PointView;
+import com.yatoooon.customview.draw.ProvinceView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -25,9 +26,32 @@ public class MainActivity extends AppCompatActivity {
 //        setExample1();
 //        setExample2();
 //        setExample3();
-        setExample4();
+//        setExample4();
+        setExample5();
 
 
+    }
+
+
+    class ProvinceEvaluator implements TypeEvaluator<String> {
+        @Override
+        public String evaluate(float fraction, String startValue, String endValue) {
+            // 北京市      上海市       fraction 0.5f
+            int startIndex = ProvinceView.provinces.indexOf(startValue);
+            int endIndex = ProvinceView.provinces.indexOf(endValue);
+            int index = (int) (startIndex + (endIndex - startIndex) * fraction);
+            return ProvinceView.provinces.get(index);
+        }
+
+
+    }
+
+    private void setExample5() {
+        String endStr = "甘肃省";
+        ObjectAnimator objectAnimator = ObjectAnimator.ofObject(view, "province", new ProvinceEvaluator(), endStr);
+        objectAnimator.setDuration(1500);
+        objectAnimator.setStartDelay(1000);
+        objectAnimator.start();
     }
 
     private void setExample4() {
