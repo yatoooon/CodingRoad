@@ -20,12 +20,16 @@ public class CameraView extends View {
     Path clipPath_top = new Path();
     Path clipPath_bottom = new Path();
 
+    private float topRotateDeg = 0;
+    private float flipDeg = 0;
+    private float bottomRotateDeg = 0;
+
+
     public CameraView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
 
     {
-        camera.rotateX(45);
         camera.setLocation(0, 0, DensityUtil.getZForCamera());
     }
 
@@ -39,9 +43,13 @@ public class CameraView extends View {
 
         canvas.save();
         canvas.translate(getWidth() / 2, getHeight() / 2);
-        canvas.rotate(-20);
+        canvas.rotate(-flipDeg);
+        camera.save();
+        camera.rotateX(topRotateDeg);
+        camera.applyToCanvas(canvas);
+        camera.restore();
         canvas.clipPath(clipPath_top);
-        canvas.rotate(20);
+        canvas.rotate(flipDeg);
         canvas.translate(-(getWidth() / 2), -(getHeight() / 2));
         canvas.drawBitmap(BitmapUtil.getAvatar(getContext(), R.drawable.head, WIDTH * 2), null, rect, paint);
         canvas.restore();
@@ -49,14 +57,45 @@ public class CameraView extends View {
 
         canvas.save();
         canvas.translate(getWidth() / 2, getHeight() / 2);
-        canvas.rotate(-20);
+        canvas.rotate(-flipDeg);
+        camera.save();
+        camera.rotateX(bottomRotateDeg);
         camera.applyToCanvas(canvas);
+        camera.restore();
         canvas.clipPath(clipPath_bottom);
-        canvas.rotate(20);
+        canvas.rotate(flipDeg);
         canvas.translate(-(getWidth() / 2), -(getHeight() / 2));
         canvas.drawBitmap(BitmapUtil.getAvatar(getContext(), R.drawable.head, WIDTH * 2), null, rect, paint);
         canvas.restore();
 
+    }
+
+
+    public float getTopRotateDeg() {
+        return topRotateDeg;
+    }
+
+    public void setTopRotateDeg(float topRotateDeg) {
+        this.topRotateDeg = topRotateDeg;
+        invalidate();
+    }
+
+    public float getFlipDeg() {
+        return flipDeg;
+    }
+
+    public void setFlipDeg(float flipDeg) {
+        this.flipDeg = flipDeg;
+        invalidate();
+    }
+
+    public float getBottomRotateDeg() {
+        return bottomRotateDeg;
+    }
+
+    public void setBottomRotateDeg(float bottomRotateDeg) {
+        this.bottomRotateDeg = bottomRotateDeg;
+        invalidate();
     }
 
 
