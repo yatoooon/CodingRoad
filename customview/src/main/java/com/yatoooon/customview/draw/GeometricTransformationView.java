@@ -23,7 +23,7 @@ public class GeometricTransformationView extends View {
     }
 
     {
-        bitmap = BitmapUtil.getAvatar(getContext(),R.drawable.head,DensityUtil.dp2px(200));
+        bitmap = BitmapUtil.getBitmap(getContext(),R.drawable.head,DensityUtil.dp2px(200));
     }
 
     @Override

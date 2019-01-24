@@ -51,7 +51,7 @@ public class CameraView extends View {
         canvas.clipPath(clipPath_top);
         canvas.rotate(rotateDeg);
         canvas.translate(-(getWidth() / 2), -(getHeight() / 2));
-        canvas.drawBitmap(BitmapUtil.getAvatar(getContext(), R.drawable.head, WIDTH * 2), null, rect, paint);
+        canvas.drawBitmap(BitmapUtil.getBitmap(getContext(), R.drawable.head, WIDTH * 2), null, rect, paint);
         canvas.restore();
 
 
@@ -65,7 +65,7 @@ public class CameraView extends View {
         canvas.clipPath(clipPath_bottom);
         canvas.rotate(rotateDeg);
         canvas.translate(-(getWidth() / 2), -(getHeight() / 2));
-        canvas.drawBitmap(BitmapUtil.getAvatar(getContext(), R.drawable.head, WIDTH * 2), null, rect, paint);
+        canvas.drawBitmap(BitmapUtil.getBitmap(getContext(), R.drawable.head, WIDTH * 2), null, rect, paint);
         canvas.restore();
 
     }

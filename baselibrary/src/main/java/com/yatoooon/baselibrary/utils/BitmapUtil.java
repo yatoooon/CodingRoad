@@ -6,7 +6,7 @@ import android.graphics.BitmapFactory;
 
 public class BitmapUtil {
 
-    public static Bitmap getAvatar(Context context, int drawable, int width) {
+    public static Bitmap getBitmap(Context context, int drawable, int width) {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
         BitmapFactory.decodeResource(context.getResources(), drawable, options);

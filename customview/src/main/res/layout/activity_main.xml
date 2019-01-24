@@ -6,7 +6,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
 >
-    <com.yatoooon.customview.draw.ProvinceView
+    <com.yatoooon.customview.draw.DottedLineView
             android:id="@+id/view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

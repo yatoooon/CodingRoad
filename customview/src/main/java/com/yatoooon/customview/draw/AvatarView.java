@@ -33,7 +33,7 @@ public class AvatarView extends View {
         canvas.drawCircle(getWidth() / 2, getHeight() / 2, RADIUS - EDGE, paint);
         paint.setXfermode(xfermode);
         rect.set(getWidth() / 2 - RADIUS, getHeight() / 2 - RADIUS, getWidth() / 2 + RADIUS, getHeight() / 2 + RADIUS);
-        canvas.drawBitmap(BitmapUtil.getAvatar(getContext(),R.drawable.head,WIDTH), null, rect, paint);
+        canvas.drawBitmap(BitmapUtil.getBitmap(getContext(),R.drawable.head,WIDTH), null, rect, paint);
         paint.setXfermode(null);
         canvas.restoreToCount(saveLayer);
     }

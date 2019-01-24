@@ -1,19 +1,24 @@
 package com.yatoooon.customview;
 
 import android.animation.*;
-import android.graphics.Point;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.PointF;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import com.yatoooon.baselibrary.utils.BitmapUtil;
 import com.yatoooon.baselibrary.utils.DensityUtil;
-import com.yatoooon.customview.draw.PointView;
+import com.yatoooon.customview.draw.DottedLineView;
 import com.yatoooon.customview.draw.ProvinceView;
 
 public class MainActivity extends AppCompatActivity {
 
     //    private CameraView view;    //1 2 3
 //    private PointView view;       //4
-    private ProvinceView view;       //5
+//    private ProvinceView view;       //5
+    private DottedLineView view;       //6
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,11 +33,49 @@ public class MainActivity extends AppCompatActivity {
 //        setExample2();
 //        setExample3();
 //        setExample4();
-        setExample5();
+//        setExample5();
+        setExample6();
 
 
     }
 
+    private void setExample6() {
+        Bitmap avatar = BitmapUtil.getBitmap(this, R.drawable.head, DensityUtil.dp2px(200));
+
+        //bitmap2drawable
+        BitmapDrawable bitmapDrawable = new BitmapDrawable(getResources(), avatar);
+
+        //drawable2bitmap
+        Bitmap bitmap = drawableToBitmap(bitmapDrawable);
+
+        //Resize Bitmap
+        final int IMAGE_WIDTH = 320;
+        final int IMAGE_HEIGHT = 180;
+        Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, IMAGE_WIDTH, IMAGE_HEIGHT, true);
+
+    }
+
+    public static Bitmap drawableToBitmap(Drawable drawable) {
+        Bitmap bitmap = null;
+
+        if (drawable instanceof BitmapDrawable) {
+            BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
+            if (bitmapDrawable.getBitmap() != null) {
+                return bitmapDrawable.getBitmap();
+            }
+        }
+
+        if (drawable.getIntrinsicWidth() <= 0 || drawable.getIntrinsicHeight() <= 0) {
+            bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888); // Single color bitmap will be created of 1x1 pixel
+        } else {
+            bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        }
+
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+        return bitmap;
+    }
 
     class ProvinceEvaluator implements TypeEvaluator<String> {
         @Override
@@ -94,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         AnimatorSet animatorSet = new AnimatorSet();
-        animatorSet.playSequentially(bottomAnimator, flipAnimator, topAnimator);   //依次执行
+        animatorSet.playSequentially(bottomAnimator, flipAnimator, topAnimator);   //依次执行   playTogether是同时执行
         animatorSet.setStartDelay(1500);
         animatorSet.start();
 
