@@ -17,7 +17,9 @@ public class SquareImageView extends AppCompatImageView {
 
         int width = getMeasuredWidth();
         int height = getMeasuredHeight();
-        int size = Math.min(width, height);
+        int size = Math.min(width, height); //只有确定的值才有效   matchparent 和wrapcontent 无效
+
+
         setMeasuredDimension(size, size);
     }
 }

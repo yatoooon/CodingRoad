@@ -10,7 +10,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import com.yatoooon.baselibrary.utils.BitmapUtil;
 import com.yatoooon.baselibrary.utils.DensityUtil;
-import com.yatoooon.customview.draw.DottedLineView;
+import com.yatoooon.customview.bitmap_drawable.DrawableView;
 import com.yatoooon.customview.draw.ProvinceView;
 
 public class MainActivity extends AppCompatActivity {
@@ -18,7 +18,9 @@ public class MainActivity extends AppCompatActivity {
     //    private CameraView view;    //1 2 3
 //    private PointView view;       //4
 //    private ProvinceView view;       //5
-    private DottedLineView view;       //6
+//    private DottedLineView view;       //6
+    private DrawableView view;
+//    private SquareImageView view;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
 //        setExample3();
 //        setExample4();
 //        setExample5();
-        setExample6();
+//        setExample6();
 
 
     }
