@@ -10,6 +10,8 @@ public class DrawableView extends View {
     //自定义drawable
     MeshDrawable meshDrawable;
 
+    //常用的google都封装好了   比如BitmapDrawable    ColorDrawable
+
     public DrawableView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }

@@ -10,8 +10,9 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import com.yatoooon.baselibrary.utils.BitmapUtil;
 import com.yatoooon.baselibrary.utils.DensityUtil;
-import com.yatoooon.customview.bitmap_drawable.DrawableView;
+import com.yatoooon.customview.draw.MaterialEditText;
 import com.yatoooon.customview.draw.ProvinceView;
+import com.yatoooon.customview.layout.SquareImageView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -19,8 +20,9 @@ public class MainActivity extends AppCompatActivity {
 //    private PointView view;       //4
 //    private ProvinceView view;       //5
 //    private DottedLineView view;       //6
-    private DrawableView view;
+//    private DrawableView view;
 //    private SquareImageView view;
+    private MaterialEditText view;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
