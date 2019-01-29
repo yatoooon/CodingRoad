@@ -2,6 +2,7 @@ package com.yatoooon.customview.draw;
 
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
@@ -22,7 +23,8 @@ public class MaterialEditText extends AppCompatEditText {
     private static final int PADDING_LEFT = DensityUtil.dp2px(5);
 
     private boolean useFloatingLable = true;
-    private Rect rect;
+    private Rect padding = new Rect();
+
 
     private float getCustomValue() {
         return customValue;
@@ -46,10 +48,10 @@ public class MaterialEditText extends AppCompatEditText {
 
     private void setPadding(boolean useFloatingLable) {
         if (useFloatingLable) {
-            setPadding(getPaddingLeft(), rect.top + TEXTSIZE + PADDING_TOP, getPaddingRight(), getPaddingBottom());
+            setPadding(getPaddingLeft(), padding.top + TEXTSIZE + PADDING_TOP, getPaddingRight(), getPaddingBottom());
 
         } else {
-            setPadding(getPaddingLeft(), rect.top, getPaddingRight(), getPaddingBottom());
+            setPadding(getPaddingLeft(), padding.top, getPaddingRight(), getPaddingBottom());
         }
     }
 
@@ -59,7 +61,11 @@ public class MaterialEditText extends AppCompatEditText {
     }
 
     private void init(Context context, AttributeSet attrs) {
-        rect = new Rect(getBackground().getBounds());
+        getBackground().getPadding(padding);
+
+        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.MaterialEditText);
+        useFloatingLable = typedArray.getBoolean(R.styleable.MaterialEditText_useFloatingLable, true);
+        typedArray.recycle();
 
         addTextChangedListener(new TextWatcher() {
             @Override

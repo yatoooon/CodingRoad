@@ -14,14 +14,13 @@ import com.yatoooon.customview.draw.MaterialEditText;
 import com.yatoooon.customview.draw.ProvinceView;
 import com.yatoooon.customview.layout.SquareImageView;
 
-public class MainActivity extends AppCompatActivity {
+public class DrawActivity extends AppCompatActivity {
 
     //    private CameraView view;    //1 2 3
 //    private PointView view;       //4
 //    private ProvinceView view;       //5
 //    private DottedLineView view;       //6
 //    private DrawableView view;
-//    private SquareImageView view;
     private MaterialEditText view;  //7
 
     @Override
