@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
 //    private DottedLineView view;       //6
 //    private DrawableView view;
 //    private SquareImageView view;
-    private MaterialEditText view;
+    private MaterialEditText view;  //7
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,8 +39,18 @@ public class MainActivity extends AppCompatActivity {
 //        setExample4();
 //        setExample5();
 //        setExample6();
+        setExample7();
 
 
+    }
+
+    private void setExample7() {
+        view.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                view.setUseFloatingLable(false);
+            }
+        }, 3000);
     }
 
     private void setExample6() {

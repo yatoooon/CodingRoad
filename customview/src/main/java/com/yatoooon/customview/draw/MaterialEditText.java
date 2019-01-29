@@ -4,6 +4,7 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatEditText;
 import android.text.Editable;
@@ -14,14 +15,51 @@ import com.yatoooon.baselibrary.utils.DensityUtil;
 import com.yatoooon.customview.R;
 
 public class MaterialEditText extends AppCompatEditText {
-    public static final int TEXTSIZE = DensityUtil.dp2px(20);
-    public static final int PADDING_TOP = DensityUtil.dp2px(10);
-    public static final int PADDING_LEFT = DensityUtil.dp2px(5);
-
     Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+
+    private static final int TEXTSIZE = DensityUtil.dp2px(20);
+    private static final int PADDING_TOP = DensityUtil.dp2px(10);
+    private static final int PADDING_LEFT = DensityUtil.dp2px(5);
+
+    private boolean useFloatingLable = true;
+    private Rect rect;
+
+    private float getCustomValue() {
+        return customValue;
+    }
+
+    private void setCustomValue(float customValue) {
+        this.customValue = customValue;
+        invalidate();
+    }
+
+    private float customValue;
+
+
+    private boolean isShow;
+
+    public void setUseFloatingLable(boolean useFloatingLable) {
+        this.useFloatingLable = useFloatingLable;
+//        requestLayout();
+        setPadding(useFloatingLable);
+    }
+
+    private void setPadding(boolean useFloatingLable) {
+        if (useFloatingLable) {
+            setPadding(getPaddingLeft(), rect.top + TEXTSIZE + PADDING_TOP, getPaddingRight(), getPaddingBottom());
+
+        } else {
+            setPadding(getPaddingLeft(), rect.top, getPaddingRight(), getPaddingBottom());
+        }
+    }
 
     public MaterialEditText(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+        init(context, attrs);
+    }
+
+    private void init(Context context, AttributeSet attrs) {
+        rect = new Rect(getBackground().getBounds());
 
         addTextChangedListener(new TextWatcher() {
             @Override
@@ -31,12 +69,14 @@ public class MaterialEditText extends AppCompatEditText {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (isShow && TextUtils.isEmpty(s)) {
-                    isShow = false;
-                    animatior().reverse();
-                } else if (!isShow && !TextUtils.isEmpty(s)) {
-                    isShow = true;
-                    animatior().start();
+                if (useFloatingLable) {
+                    if (isShow && TextUtils.isEmpty(s)) {
+                        isShow = false;
+                        animatior().reverse();
+                    } else if (!isShow && !TextUtils.isEmpty(s)) {
+                        isShow = true;
+                        animatior().start();
+                    }
                 }
             }
 
@@ -45,32 +85,16 @@ public class MaterialEditText extends AppCompatEditText {
 
             }
         });
+        setPadding(useFloatingLable);
+        paint.setTextSize(TEXTSIZE);
+        paint.setColor(getResources().getColor(R.color.colorAccent));
+
     }
-
-    public float getCustomValue() {
-        return customValue;
-    }
-
-    public void setCustomValue(float customValue) {
-        this.customValue = customValue;
-        invalidate();
-    }
-
-    private float customValue;
-
-    private boolean isShow;
-
 
     private ObjectAnimator animatior() {
         ObjectAnimator animator = ObjectAnimator.ofFloat(MaterialEditText.this, "customValue", 0, 1);
         animator.setDuration(200);
         return animator;
-    }
-
-    {
-        setPadding(getPaddingLeft(), getPaddingTop() + TEXTSIZE, getPaddingRight(), getPaddingBottom());
-        paint.setTextSize(TEXTSIZE);
-        paint.setColor(getResources().getColor(R.color.colorAccent));
     }
 
 
