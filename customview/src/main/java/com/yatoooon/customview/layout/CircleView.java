@@ -23,8 +23,8 @@ public class CircleView extends View {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int width = RADIUS * 2;
         int height = RADIUS * 2;
-//        width = resolveSizeAndState(width, widthMeasureSpec, 0);    //对计算结果进行修正  看看父view的要求和自己计算的尺寸   看一下源码
-//        height = resolveSizeAndState(height, heightMeasureSpec, 0);
+        width = resolveSizeAndState(width, widthMeasureSpec, 0);    //对计算结果进行修正  看看父view的要求和自己计算的尺寸   看一下源码
+        height = resolveSizeAndState(height, heightMeasureSpec, 0);
         setMeasuredDimension(width, height);
     }
 
