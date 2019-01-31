@@ -1,16 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<HorizontalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-                      android:layout_width="match_parent"
-                      android:orientation="vertical"
-                      android:layout_height="match_parent">
-    <!--HorizontalScrollView 和 ScrollView  可以观察出宽和高的修正-->
+<!--<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--android:layout_width="match_parent"-->
+<!--android:orientation="vertical"-->
+<!--android:layout_height="match_parent">-->
+<!--&lt;!&ndash;HorizontalScrollView 和 ScrollView  可以观察出CircleView宽和高的修正&ndash;&gt;-->
 
-    <com.yatoooon.customview.layout.CircleView
-            android:id="@+id/view"
-            android:layout_width="300dp"
-            android:background="#cccccc"
-            android:layout_height="200dp"
+<!--<com.yatoooon.customview.layout.CircleView-->
+<!--android:id="@+id/view"-->
+<!--android:layout_width="300dp"-->
+<!--android:background="#cccccc"-->
+<!--android:layout_height="200dp"-->
 
-    />
+<!--/>-->
+<!--</ScrollView>-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:orientation="vertical"
+              android:layout_height="match_parent">
 
-</HorizontalScrollView>
+    <com.yatoooon.customview.layout.TagLayout android:layout_width="match_parent"
+                                              android:background="#ffffff"
+                                              android:layout_height="match_parent">
+        <TextView android:layout_width="100dp"
+                  android:text="dwadwaddhwa"
+                  android:textColor="#000000"
+                  android:textSize="10dp"
+                  android:layout_height="100dp"
+        />
+        <TextView android:layout_width="100dp"
+                  android:text="dwadwaddhwa"
+                  android:textColor="#000000"
+                  android:textSize="10dp"
+                  android:layout_height="100dp"
+        />
+        <TextView android:layout_width="100dp"
+                  android:text="dwadwaddhwa"
+                  android:textColor="#000000"
+                  android:textSize="10dp"
+                  android:layout_height="100dp"
+        />
+        <TextView android:layout_width="100dp"
+                  android:text="dwadwaddhwa"
+                  android:textColor="#000000"
+                  android:textSize="10dp"
+                  android:layout_height="100dp"
+        />
+        <TextView android:layout_width="100dp"
+                  android:text="dwadwaddhwa"
+                  android:textColor="#000000"
+                  android:textSize="10dp"
+                  android:layout_height="100dp"
+        />
+        <TextView android:layout_width="wrap_content"
+                  android:text="dwadwaddhwa"
+                  android:textColor="#000000"
+                  android:textSize="10dp"
+                  android:layout_height="wrap_content"
+        />
+        <TextView android:layout_width="wrap_content"
+                  android:text="dwadwaddhwa"
+                  android:textColor="#000000"
+                  android:textSize="10dp"
+                  android:layout_height="wrap_content"
+        />
+        <TextView android:layout_width="wrap_content"
+                  android:text="dwadwaddhwa"
+                  android:textColor="#000000"
+                  android:textSize="10dp"
+                  android:layout_height="wrap_content"
+        />
+
+    </com.yatoooon.customview.layout.TagLayout>
+
+</LinearLayout>

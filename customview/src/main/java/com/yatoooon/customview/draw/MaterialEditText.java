@@ -24,6 +24,7 @@ public class MaterialEditText extends AppCompatEditText {
 
     private boolean useFloatingLable = true;
     private Rect padding = new Rect();
+    private ObjectAnimator animator;
 
 
     private float getCustomValue() {
@@ -98,8 +99,11 @@ public class MaterialEditText extends AppCompatEditText {
     }
 
     private ObjectAnimator animatior() {
-        ObjectAnimator animator = ObjectAnimator.ofFloat(MaterialEditText.this, "customValue", 0, 1);
-        animator.setDuration(200);
+        if (animator == null) {
+            animator = ObjectAnimator.ofFloat(MaterialEditText.this, "customValue", 0, 1);
+            animator.setDuration(200);
+            return animator;
+        }
         return animator;
     }
 
