@@ -20,19 +20,30 @@ public class TagLayout extends ViewGroup {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        int widthUsed = 0;
+        int currentLineWidthUsed = 0;
+        int currentLineMaxHeight = 0;
         int heightUsed = 0;
+        int mode = MeasureSpec.getMode(widthMeasureSpec);
+        int size = MeasureSpec.getSize(widthMeasureSpec);
         for (int i = 0; i < getChildCount(); i++) {
             View childAt = getChildAt(i);
-            measureChildWithMargins(childAt, widthMeasureSpec, widthUsed, heightMeasureSpec, heightUsed);
+            measureChildWithMargins(childAt, widthMeasureSpec, 0, heightMeasureSpec, heightUsed);
+            if (currentLineWidthUsed + childAt.getMeasuredWidth() > size) {
+                heightUsed = heightUsed + currentLineMaxHeight;
+                currentLineWidthUsed = 0;
+                currentLineMaxHeight = 0;
+                measureChildWithMargins(childAt, widthMeasureSpec, 0, heightMeasureSpec, heightUsed);
+            }
+
             Rect rect = new Rect();
-            rect.set(widthUsed, 0, widthUsed + childAt.getMeasuredWidth(), childAt.getMeasuredHeight());
+            rect.set(currentLineWidthUsed, heightUsed, currentLineWidthUsed + childAt.getMeasuredWidth(), heightUsed+childAt.getMeasuredHeight());
             childLayoutList.add(rect);
-            widthUsed = widthUsed + childAt.getMeasuredWidth();
-            heightUsed = childAt.getMeasuredHeight();
+            currentLineWidthUsed = currentLineWidthUsed + childAt.getMeasuredWidth();
+            currentLineMaxHeight = Math.max(currentLineMaxHeight, childAt.getMeasuredHeight());
         }
 
-        setMeasuredDimension(widthUsed, heightUsed);
+        int height = heightUsed + currentLineMaxHeight;
+        setMeasuredDimension(widthMeasureSpec, height);
     }
 
     @Override
