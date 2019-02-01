@@ -28,15 +28,14 @@ public class TagLayout extends ViewGroup {
         for (int i = 0; i < getChildCount(); i++) {
             View childAt = getChildAt(i);
             measureChildWithMargins(childAt, widthMeasureSpec, 0, heightMeasureSpec, heightUsed);
-            if (currentLineWidthUsed + childAt.getMeasuredWidth() > size) {
+            if (mode != MeasureSpec.UNSPECIFIED && currentLineWidthUsed + childAt.getMeasuredWidth() > size) {
                 heightUsed = heightUsed + currentLineMaxHeight;
                 currentLineWidthUsed = 0;
                 currentLineMaxHeight = 0;
                 measureChildWithMargins(childAt, widthMeasureSpec, 0, heightMeasureSpec, heightUsed);
             }
-
             Rect rect = new Rect();
-            rect.set(currentLineWidthUsed, heightUsed, currentLineWidthUsed + childAt.getMeasuredWidth(), heightUsed+childAt.getMeasuredHeight());
+            rect.set(currentLineWidthUsed, heightUsed, currentLineWidthUsed + childAt.getMeasuredWidth(), heightUsed + childAt.getMeasuredHeight());
             childLayoutList.add(rect);
             currentLineWidthUsed = currentLineWidthUsed + childAt.getMeasuredWidth();
             currentLineMaxHeight = Math.max(currentLineMaxHeight, childAt.getMeasuredHeight());

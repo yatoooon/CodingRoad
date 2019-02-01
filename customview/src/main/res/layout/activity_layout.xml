@@ -15,10 +15,11 @@
 <!--</ScrollView>-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
-              android:orientation="vertical"
               android:layout_height="match_parent">
 
-    <com.yatoooon.customview.layout.TagLayout android:layout_width="match_parent"
+    <!--当父布局是HorizontalScrollView 也就是说MeasureSpec是UNSPECIFIED  要遵循父布局的期望不换行-->
+    <com.yatoooon.customview.layout.TagLayout android:layout_width="wrap_content"
+                                              android:id="@+id/view"
                                               android:background="#ffffff"
                                               android:layout_height="match_parent">
         <TextView android:layout_width="100dp"
@@ -63,11 +64,11 @@
                   android:textSize="10dp"
                   android:layout_height="wrap_content"
         />
-        <TextView android:layout_width="wrap_content"
+        <TextView android:layout_width="200dp"
                   android:text="dwadwaddhwa"
                   android:textColor="#000000"
                   android:textSize="10dp"
-                  android:layout_height="wrap_content"
+                  android:layout_height="200dp"
         />
 
     </com.yatoooon.customview.layout.TagLayout>
