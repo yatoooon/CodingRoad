@@ -33,10 +33,13 @@ public class LayoutActivity extends AppCompatActivity {
     }
 
     private void setExample2() {
-        TextView textView = new TextView(this);
-        textView.setText("哈哈哈哈");
-        textView.setLayoutParams(new ViewGroup.MarginLayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        view.addView(textView);
+        for (int i = 0; i < 5; i++) {
+            TextView textView = new TextView(this);
+            textView.setText("哈哈哈哈     ");
+            textView.setLayoutParams(new ViewGroup.MarginLayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            view.addView(textView);
+        }
+
     }
 
 //    private void setExample1() {
