@@ -1,5 +1,7 @@
 package com.yatoooon.customview.touchfeedback;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -69,7 +71,7 @@ public class ScalableImageView extends View implements GestureDetector.OnGesture
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        canvas.translate(offSetX, offSetY);
+        canvas.translate(offSetX * scaleValue, offSetY * scaleValue);
         currentscale = smallscale + (bigsmallscale - smallscale) * scaleValue;
         rect.set(getWidth() / 2 - WIDTH, getHeight() / 2 - WIDTH, getWidth() / 2 + WIDTH, getHeight() / 2 + WIDTH);
         canvas.scale(currentscale, currentscale, getWidth() / 2, getHeight() / 2);
@@ -112,18 +114,7 @@ public class ScalableImageView extends View implements GestureDetector.OnGesture
         if (isBig) {
             offSetX = offSetX - distanceX;
             offSetY = offSetY - distanceY;
-            float maxX = (bitmap.getWidth() * bigsmallscale - getWidth()) / 2;
-            float maxY = (bitmap.getHeight() * bigsmallscale - getHeight()) / 2;
-            if (offSetX > maxX) {
-                offSetX = maxX;
-            } else if (offSetX < -maxX) {
-                offSetX = -maxX;
-            }
-            if (offSetY > maxY) {
-                offSetY = maxY;
-            } else if (offSetY < -maxY) {
-                offSetY = -maxY;
-            }
+            correctionOffSet();
             invalidate();
         }
         return false;
@@ -170,10 +161,28 @@ public class ScalableImageView extends View implements GestureDetector.OnGesture
         if (isBig) {
             getScaleAnimator().reverse();
         } else {
+            offSetX = (e.getX() - getWidth() / 2) - (e.getX() - getWidth() / 2) * bigsmallscale / smallscale;  //这里需要研究一下
+            offSetY = (e.getY() - getHeight() / 2) - (e.getY() - getHeight() / 2) * bigsmallscale / smallscale;//这里需要研究一下
+            correctionOffSet();
             getScaleAnimator().start();
         }
         isBig = !isBig;
         return false;
+    }
+
+    private void correctionOffSet() {
+        float maxX = (bitmap.getWidth() * bigsmallscale - getWidth()) / 2;
+        float maxY = (bitmap.getHeight() * bigsmallscale - getHeight()) / 2;
+        if (offSetX > maxX) {
+            offSetX = maxX;
+        } else if (offSetX < -maxX) {
+            offSetX = -maxX;
+        }
+        if (offSetY > maxY) {
+            offSetY = maxY;
+        } else if (offSetY < -maxY) {
+            offSetY = -maxY;
+        }
     }
 
     @Override
@@ -185,6 +194,15 @@ public class ScalableImageView extends View implements GestureDetector.OnGesture
     public ObjectAnimator getScaleAnimator() {
         if (scaleAnimator == null) {
             scaleAnimator = ObjectAnimator.ofFloat(this, "scaleValue", 0, 1);
+            scaleAnimator.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    if (!isBig) {
+                        offSetX = 0;
+                        offSetY = 0;
+                    }
+                }
+            });
         }
         return scaleAnimator;
     }
