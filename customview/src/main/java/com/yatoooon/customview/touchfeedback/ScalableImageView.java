@@ -208,6 +208,7 @@ public class ScalableImageView extends View implements GestureDetector.OnGesture
                     if (!isBig) {
                         offSetX = 0;
                         offSetY = 0;
+                        temp = 0;
                     }
                 }
             });
@@ -216,9 +217,23 @@ public class ScalableImageView extends View implements GestureDetector.OnGesture
     }
 
 
+    float temp = 0;
+
     @Override
     public boolean onScale(ScaleGestureDetector detector) {
         Timber.d("onScale      " + detector.getScaleFactor());
+        if (detector.getScaleFactor() > 1) {
+            scaleValue = temp + detector.getScaleFactor() / 10;
+        } else {
+            scaleValue = temp - (1 - detector.getScaleFactor());
+        }
+        if (scaleValue < 0) {
+            scaleValue = 0;
+        } else if (scaleValue > 1) {
+            scaleValue = 1;
+        }
+        isBig = scaleValue > 0;
+        invalidate();
         return false;
     }
 
@@ -231,6 +246,16 @@ public class ScalableImageView extends View implements GestureDetector.OnGesture
     @Override
     public void onScaleEnd(ScaleGestureDetector detector) {
         Timber.d("onScaleEnd      " + detector.getScaleFactor());
-
+        if (detector.getScaleFactor() > 1) {
+            temp = temp + detector.getScaleFactor() / 10;
+            if (temp > 1) {
+                temp = 1;
+            }
+        } else {
+            temp = temp - (1 - detector.getScaleFactor());
+            if (temp < 0) {
+                temp = 0;
+            }
+        }
     }
 }
