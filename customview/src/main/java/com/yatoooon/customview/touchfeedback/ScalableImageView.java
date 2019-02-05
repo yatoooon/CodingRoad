@@ -14,13 +14,15 @@ import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.widget.OverScroller;
 import com.yatoooon.baselibrary.utils.BitmapUtil;
 import com.yatoooon.baselibrary.utils.DensityUtil;
 import com.yatoooon.customview.R;
+import timber.log.Timber;
 
-public class ScalableImageView extends View implements GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener {
+public class ScalableImageView extends View implements GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener, ScaleGestureDetector.OnScaleGestureListener {
     Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     Rect rect = new Rect();
     public static final int WIDTH = DensityUtil.dp2px(100);
@@ -30,7 +32,7 @@ public class ScalableImageView extends View implements GestureDetector.OnGesture
     float smallscale;
     float bigsmallscale;
     private final GestureDetectorCompat detector;
-    float scaleValue;
+    float scaleValue; //0-1
 
     float currentscale = 0;
     ObjectAnimator scaleAnimator;
@@ -40,6 +42,7 @@ public class ScalableImageView extends View implements GestureDetector.OnGesture
     float offSetX = 0;
     float offSetY = 0;
     private final OverScroller overScroller;
+    private final ScaleGestureDetector scaleGestureDetector;
 
     public ScalableImageView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -48,6 +51,7 @@ public class ScalableImageView extends View implements GestureDetector.OnGesture
         detector.setIsLongpressEnabled(false);
         detector.setOnDoubleTapListener(this);
         overScroller = new OverScroller(context);
+        scaleGestureDetector = new ScaleGestureDetector(context, this);
     }
 
 
@@ -91,7 +95,11 @@ public class ScalableImageView extends View implements GestureDetector.OnGesture
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        return detector.onTouchEvent(event);
+        boolean result = scaleGestureDetector.onTouchEvent(event);
+        if (!scaleGestureDetector.isInProgress()) {
+            result = detector.onTouchEvent(event);
+        }
+        return result;
     }
 
     @Override
@@ -205,5 +213,24 @@ public class ScalableImageView extends View implements GestureDetector.OnGesture
             });
         }
         return scaleAnimator;
+    }
+
+
+    @Override
+    public boolean onScale(ScaleGestureDetector detector) {
+        Timber.d("onScale      " + detector.getScaleFactor());
+        return false;
+    }
+
+    @Override
+    public boolean onScaleBegin(ScaleGestureDetector detector) {
+        Timber.d("onScaleBegin      " + detector.getScaleFactor());
+        return true;
+    }
+
+    @Override
+    public void onScaleEnd(ScaleGestureDetector detector) {
+        Timber.d("onScaleEnd      " + detector.getScaleFactor());
+
     }
 }
