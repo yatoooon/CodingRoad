@@ -223,7 +223,7 @@ public class ScalableImageView extends View implements GestureDetector.OnGesture
     public boolean onScale(ScaleGestureDetector detector) {
         Timber.d("onScale      " + detector.getScaleFactor());
         if (detector.getScaleFactor() > 1) {
-            scaleValue = temp + detector.getScaleFactor() / 10;
+            scaleValue = temp + detector.getScaleFactor() / 5;  //感觉这的10改成5效果更好一点
         } else {
             scaleValue = temp - (1 - detector.getScaleFactor());
         }
@@ -247,7 +247,7 @@ public class ScalableImageView extends View implements GestureDetector.OnGesture
     public void onScaleEnd(ScaleGestureDetector detector) {
         Timber.d("onScaleEnd      " + detector.getScaleFactor());
         if (detector.getScaleFactor() > 1) {
-            temp = temp + detector.getScaleFactor() / 10;
+            temp = temp + detector.getScaleFactor() / 5; //感觉这的10改成5效果更好一点
             if (temp > 1) {
                 temp = 1;
             }
