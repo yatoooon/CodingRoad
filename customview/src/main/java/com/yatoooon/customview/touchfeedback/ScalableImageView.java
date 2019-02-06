@@ -169,8 +169,8 @@ public class ScalableImageView extends View implements GestureDetector.OnGesture
         if (isBig) {
             getScaleAnimator().reverse();
         } else {
-            offSetX = (e.getX() - getWidth() / 2) - (e.getX() - getWidth() / 2) * bigsmallscale / smallscale;  //这里需要研究一下
-            offSetY = (e.getY() - getHeight() / 2) - (e.getY() - getHeight() / 2) * bigsmallscale / smallscale;//这里需要研究一下
+            offSetX = (e.getX() - getWidth() / 2) - (e.getX() - getWidth() / 2) * bigsmallscale / smallscale;
+            offSetY = (e.getY() - getHeight() / 2) - (e.getY() - getHeight() / 2) * bigsmallscale / smallscale;
             correctionOffSet();
             getScaleAnimator().start();
         }
@@ -223,9 +223,9 @@ public class ScalableImageView extends View implements GestureDetector.OnGesture
     public boolean onScale(ScaleGestureDetector detector) {
         Timber.d("onScale      " + detector.getScaleFactor());
         if (detector.getScaleFactor() > 1) {
-            scaleValue = temp + detector.getScaleFactor() / 5;  //感觉这的10改成5效果更好一点
+            scaleValue = temp + detector.getScaleFactor() / 3;  //感觉这的10改成3效果更好一点
         } else {
-            scaleValue = temp - (1 - detector.getScaleFactor());
+            scaleValue = temp - (1 - detector.getScaleFactor())*3;
         }
         if (scaleValue < 0) {
             scaleValue = 0;
@@ -247,12 +247,12 @@ public class ScalableImageView extends View implements GestureDetector.OnGesture
     public void onScaleEnd(ScaleGestureDetector detector) {
         Timber.d("onScaleEnd      " + detector.getScaleFactor());
         if (detector.getScaleFactor() > 1) {
-            temp = temp + detector.getScaleFactor() / 5; //感觉这的10改成5效果更好一点
+            temp = temp + detector.getScaleFactor() / 3; //感觉这的10改成3效果更好一点
             if (temp > 1) {
                 temp = 1;
             }
         } else {
-            temp = temp - (1 - detector.getScaleFactor());
+            temp = temp - (1 - detector.getScaleFactor())*3;
             if (temp < 0) {
                 temp = 0;
             }
