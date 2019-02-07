@@ -32,7 +32,6 @@ public class ScalableImageView extends View implements GestureDetector.OnGesture
     float smallscale;
     float bigsmallscale;
     private final GestureDetectorCompat detector;
-    float scaleValue; //0-1
 
     float currentscale = 0;
     ObjectAnimator scaleAnimator;
@@ -69,14 +68,16 @@ public class ScalableImageView extends View implements GestureDetector.OnGesture
             bigsmallscale = (float) getWidth() / this.bitmap.getWidth() * ScaleFactor;
             smallscale = (float) getHeight() / this.bitmap.getHeight();
         }
+
+        currentscale = smallscale;
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        canvas.translate(offSetX * scaleValue, offSetY * scaleValue);
-        currentscale = smallscale + (bigsmallscale - smallscale) * scaleValue;
+        float scaleFraction = (currentscale - smallscale) / (bigsmallscale - smallscale);
+        canvas.translate(offSetX * scaleFraction, offSetY * scaleFraction);
         rect.set(getWidth() / 2 - WIDTH, getHeight() / 2 - WIDTH, getWidth() / 2 + WIDTH, getHeight() / 2 + WIDTH);
         canvas.scale(currentscale, currentscale, getWidth() / 2, getHeight() / 2);
         canvas.drawBitmap(bitmap, null, rect, paint);
@@ -84,11 +85,11 @@ public class ScalableImageView extends View implements GestureDetector.OnGesture
     }
 
     public float getScaleValue() {
-        return scaleValue;
+        return currentscale;
     }
 
     public void setScaleValue(float scaleValue) {
-        this.scaleValue = scaleValue;
+        this.currentscale = scaleValue;
         invalidate();
     }
 
@@ -201,14 +202,14 @@ public class ScalableImageView extends View implements GestureDetector.OnGesture
 
     public ObjectAnimator getScaleAnimator() {
         if (scaleAnimator == null) {
-            scaleAnimator = ObjectAnimator.ofFloat(this, "scaleValue", 0, 1);
+            scaleAnimator = ObjectAnimator.ofFloat(this, "scaleValue", 0);
+            scaleAnimator.setFloatValues(smallscale, bigsmallscale);
             scaleAnimator.addListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
                     if (!isBig) {
                         offSetX = 0;
                         offSetY = 0;
-                        temp = 0;
                     }
                 }
             });
@@ -217,28 +218,21 @@ public class ScalableImageView extends View implements GestureDetector.OnGesture
     }
 
 
-    float temp = 0;
+    float initialScale;
 
     @Override
     public boolean onScale(ScaleGestureDetector detector) {
+        currentscale = initialScale * detector.getScaleFactor();
+        if (currentscale > smallscale && currentscale < bigsmallscale) {
+            invalidate();
+        }
         Timber.d("onScale      " + detector.getScaleFactor());
-        if (detector.getScaleFactor() > 1) {
-            scaleValue = temp + detector.getScaleFactor() / 3;  //感觉这的10改成3效果更好一点
-        } else {
-            scaleValue = temp - (1 - detector.getScaleFactor())*3;
-        }
-        if (scaleValue < 0) {
-            scaleValue = 0;
-        } else if (scaleValue > 1) {
-            scaleValue = 1;
-        }
-        isBig = scaleValue > 0;
-        invalidate();
         return false;
     }
 
     @Override
     public boolean onScaleBegin(ScaleGestureDetector detector) {
+        initialScale = currentscale;
         Timber.d("onScaleBegin      " + detector.getScaleFactor());
         return true;
     }
@@ -246,16 +240,5 @@ public class ScalableImageView extends View implements GestureDetector.OnGesture
     @Override
     public void onScaleEnd(ScaleGestureDetector detector) {
         Timber.d("onScaleEnd      " + detector.getScaleFactor());
-        if (detector.getScaleFactor() > 1) {
-            temp = temp + detector.getScaleFactor() / 3; //感觉这的10改成3效果更好一点
-            if (temp > 1) {
-                temp = 1;
-            }
-        } else {
-            temp = temp - (1 - detector.getScaleFactor())*3;
-            if (temp < 0) {
-                temp = 0;
-            }
-        }
     }
 }
