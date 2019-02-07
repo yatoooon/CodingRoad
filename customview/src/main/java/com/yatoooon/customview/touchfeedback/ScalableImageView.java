@@ -33,7 +33,7 @@ public class ScalableImageView extends View implements GestureDetector.OnGesture
     float bigsmallscale;
     private final GestureDetectorCompat detector;
 
-    float currentscale = 0;
+    float currentScaleValue = 0;
     ObjectAnimator scaleAnimator;
 
     boolean isBig;
@@ -69,27 +69,27 @@ public class ScalableImageView extends View implements GestureDetector.OnGesture
             smallscale = (float) getHeight() / this.bitmap.getHeight();
         }
 
-        currentscale = smallscale;
+        currentScaleValue = smallscale;
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        float scaleFraction = (currentscale - smallscale) / (bigsmallscale - smallscale);
+        float scaleFraction = (currentScaleValue - smallscale) / (bigsmallscale - smallscale);
         canvas.translate(offSetX * scaleFraction, offSetY * scaleFraction);
         rect.set(getWidth() / 2 - WIDTH, getHeight() / 2 - WIDTH, getWidth() / 2 + WIDTH, getHeight() / 2 + WIDTH);
-        canvas.scale(currentscale, currentscale, getWidth() / 2, getHeight() / 2);
+        canvas.scale(currentScaleValue, currentScaleValue, getWidth() / 2, getHeight() / 2);
         canvas.drawBitmap(bitmap, null, rect, paint);
 
     }
 
-    public float getScaleValue() {
-        return currentscale;
+    public float getCurrentScaleValue() {
+        return currentScaleValue;
     }
 
-    public void setScaleValue(float scaleValue) {
-        this.currentscale = scaleValue;
+    public void setCurrentScaleValue(float currentScaleValue) {
+        this.currentScaleValue = currentScaleValue;
         invalidate();
     }
 
@@ -167,6 +167,9 @@ public class ScalableImageView extends View implements GestureDetector.OnGesture
 
     @Override
     public boolean onDoubleTap(MotionEvent e) {
+        if (currentScaleValue != smallscale && currentScaleValue != bigsmallscale) {
+            scaleAnimator = null;
+        }
         if (isBig) {
             getScaleAnimator().reverse();
         } else {
@@ -176,6 +179,9 @@ public class ScalableImageView extends View implements GestureDetector.OnGesture
             getScaleAnimator().start();
         }
         isBig = !isBig;
+        if (currentScaleValue != smallscale && currentScaleValue != bigsmallscale) {
+            scaleAnimator = null;
+        }
         return false;
     }
 
@@ -202,8 +208,12 @@ public class ScalableImageView extends View implements GestureDetector.OnGesture
 
     public ObjectAnimator getScaleAnimator() {
         if (scaleAnimator == null) {
-            scaleAnimator = ObjectAnimator.ofFloat(this, "scaleValue", 0);
-            scaleAnimator.setFloatValues(smallscale, bigsmallscale);
+            scaleAnimator = ObjectAnimator.ofFloat(this, "currentScaleValue", 0);
+            if (currentScaleValue != smallscale && currentScaleValue != bigsmallscale) {
+                scaleAnimator.setFloatValues(smallscale, currentScaleValue);
+            } else {
+                scaleAnimator.setFloatValues(smallscale, bigsmallscale);
+            }
             scaleAnimator.addListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
@@ -222,9 +232,21 @@ public class ScalableImageView extends View implements GestureDetector.OnGesture
 
     @Override
     public boolean onScale(ScaleGestureDetector detector) {
-        currentscale = initialScale * detector.getScaleFactor();
-        if (currentscale > smallscale && currentscale < bigsmallscale) {
+        currentScaleValue = initialScale * detector.getScaleFactor();
+        if (detector.getScaleFactor() > 1) {
+            offSetX = (detector.getFocusX() - getWidth() / 2) - (detector.getFocusX() - getWidth() / 2) * bigsmallscale / smallscale;
+            offSetY = (detector.getFocusY() - getHeight() / 2) - (detector.getFocusY() - getHeight() / 2) * bigsmallscale / smallscale;
+            correctionOffSet();
+        }
+        if (currentScaleValue > smallscale && currentScaleValue < bigsmallscale) {
+            isBig = true;
             invalidate();
+        } else if (currentScaleValue < smallscale) {
+            currentScaleValue = smallscale;
+            isBig = false;
+        } else if (currentScaleValue > bigsmallscale) {
+            currentScaleValue = bigsmallscale;
+            isBig = true;
         }
         Timber.d("onScale      " + detector.getScaleFactor());
         return false;
@@ -232,7 +254,7 @@ public class ScalableImageView extends View implements GestureDetector.OnGesture
 
     @Override
     public boolean onScaleBegin(ScaleGestureDetector detector) {
-        initialScale = currentscale;
+        initialScale = currentScaleValue;
         Timber.d("onScaleBegin      " + detector.getScaleFactor());
         return true;
     }
