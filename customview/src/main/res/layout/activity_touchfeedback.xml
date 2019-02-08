@@ -28,7 +28,7 @@
 
     <!--</com.yatoooon.customview.touchfeedback.TouchViewGroup>-->
 
-    <com.yatoooon.customview.touchfeedback.ScalableImageView android:layout_width="match_parent"
+    <com.yatoooon.customview.touchfeedback.MultiTouchView android:layout_width="match_parent"
                                                              android:layout_height="match_parent"/>
 
 </android.support.constraint.ConstraintLayout>
