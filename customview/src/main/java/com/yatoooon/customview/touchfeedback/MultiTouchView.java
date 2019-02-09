@@ -39,57 +39,40 @@ public class MultiTouchView extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
-        final int action = ev.getAction();
-        switch (action & MotionEvent.ACTION_MASK) {
-            case MotionEvent.ACTION_DOWN: {
-                final float x = ev.getX();
-                final float y = ev.getY();
-
-                mLastTouchX = x;
-                mLastTouchY = y;
+        switch (ev.getActionMasked()) {
+            case MotionEvent.ACTION_DOWN: {// 第⼀个⼿指按下（之前没有任何⼿指触摸到 View）
+                mLastTouchX = ev.getX();
+                mLastTouchY = ev.getY();
                 mActivePointerId = ev.getPointerId(0);
                 break;
             }
-            case MotionEvent.ACTION_MOVE: {
-                final int pointerIndex = ev.findPointerIndex(mActivePointerId);
-                final float x = ev.getX(pointerIndex);
-                final float y = ev.getY(pointerIndex);
-
-                final float dx = x - mLastTouchX;
-                final float dy = y - mLastTouchY;
-
-                mPosX += dx;
-                mPosY += dy;
-
+            case MotionEvent.ACTION_MOVE: {//有⼿指发⽣移动
+                int pointerIndex = ev.findPointerIndex(mActivePointerId);
+                float x = ev.getX(pointerIndex);
+                float y = ev.getY(pointerIndex);
+                mPosX = mPosX + x - mLastTouchX;
+                mPosY = mPosY + y - mLastTouchY;
                 mLastTouchX = x;
                 mLastTouchY = y;
-
                 invalidate();
                 break;
             }
-            case MotionEvent.ACTION_UP: {
+            case MotionEvent.ACTION_UP: {//最后⼀个⼿指抬起（抬起之后没有任何⼿指触摸到 View，这个⼿指未必是 ACTION_DOWN 的那 个⼿指）
                 mActivePointerId = INVALID_POINTER_ID;
                 break;
             }
-
-            case MotionEvent.ACTION_CANCEL: {
-                mActivePointerId = INVALID_POINTER_ID;
-                break;
-            }
-            case MotionEvent.ACTION_POINTER_DOWN: {
+            case MotionEvent.ACTION_POINTER_DOWN: {//额外⼿指按下（按下之前已经有别的⼿指触摸到 View）
                 int actionIndex = ev.getActionIndex();
+                mLastTouchX = ev.getX(actionIndex);
+                mLastTouchY = ev.getY(actionIndex);
                 mActivePointerId = ev.getPointerId(actionIndex);
-                final float x = ev.getX(actionIndex);
-                final float y = ev.getY(actionIndex);
-                mLastTouchX = x;
-                mLastTouchY = y;
                 break;
             }
-            case MotionEvent.ACTION_POINTER_UP: {
-                final int pointerIndex = ev.getActionIndex();
-                final int pointerId = ev.getPointerId(pointerIndex);
+            case MotionEvent.ACTION_POINTER_UP: {// 有⼿指抬起，但不是最后⼀个（抬起之后，仍然还有别的⼿指在触摸着 View）
+                int pointerIndex = ev.getActionIndex();
+                int pointerId = ev.getPointerId(pointerIndex);
                 if (pointerId == mActivePointerId) {
-                    final int newPointerIndex = pointerIndex == 0 ? 1 : 0;
+                    int newPointerIndex = pointerIndex == 0 ? 1 : 0;
                     mLastTouchX = ev.getX(newPointerIndex);
                     mLastTouchY = ev.getY(newPointerIndex);
                     mActivePointerId = ev.getPointerId(newPointerIndex);
