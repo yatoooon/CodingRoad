@@ -12,7 +12,7 @@ import com.yatoooon.baselibrary.utils.BitmapUtil;
 import com.yatoooon.baselibrary.utils.DensityUtil;
 import com.yatoooon.customview.R;
 
-public class MultiTouchView extends View {
+public class MultiTouchView1 extends View {
     Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     Bitmap bitmap;
     private float mPosX;
@@ -21,10 +21,9 @@ public class MultiTouchView extends View {
     private float mLastTouchX;
     private float mLastTouchY;
     private static final int INVALID_POINTER_ID = -1;
-
     private int mActivePointerId = INVALID_POINTER_ID;
 
-    public MultiTouchView(Context context, @Nullable AttributeSet attrs) {
+    public MultiTouchView1(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         bitmap = BitmapUtil.getBitmap(context, R.drawable.head, DensityUtil.dp2px(200));
 
