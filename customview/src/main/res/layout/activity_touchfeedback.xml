@@ -28,7 +28,7 @@
 
     <!--</com.yatoooon.customview.touchfeedback.TouchViewGroup>-->
 
-    <com.yatoooon.customview.touchfeedback.MultiTouchView2
+    <com.yatoooon.customview.touchfeedback.MultiTouchView3
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
