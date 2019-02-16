@@ -28,8 +28,20 @@
 
     <!--</com.yatoooon.customview.touchfeedback.TouchViewGroup>-->
 
-    <com.yatoooon.customview.touchfeedback.MultiTouchView3
+    <com.yatoooon.customview.touchfeedback.CustomViewPager
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent">
+        <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#795548"/>
+
+        <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#388E3C"/>
+
+    </com.yatoooon.customview.touchfeedback.CustomViewPager>
+
 
 </android.support.constraint.ConstraintLayout>
