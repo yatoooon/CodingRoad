@@ -4,16 +4,26 @@ package com.yatoooon.customview.touchfeedback;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.*;
+import android.widget.OverScroller;
 
 public class CustomViewPager extends ViewGroup {
 
 
+    private final int maxVelocity;
+    private final int minVelocity;
+    private final OverScroller overScroller;
     private float downX;
     private float downY;
     private int startScrollX;
 
+    VelocityTracker velocityTracker = VelocityTracker.obtain();
+
     public CustomViewPager(Context context, AttributeSet attrs) {
         super(context, attrs);
+        overScroller = new OverScroller(context);
+        ViewConfiguration viewConfiguration = ViewConfiguration.get(context);
+        maxVelocity = viewConfiguration.getScaledMaximumFlingVelocity();
+        minVelocity = viewConfiguration.getScaledMinimumFlingVelocity();
     }
 
     @Override
@@ -39,6 +49,10 @@ public class CustomViewPager extends ViewGroup {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
+            velocityTracker.clear();
+        }
+        velocityTracker.addMovement(event);
         switch (event.getActionMasked()) {
             case MotionEvent.ACTION_DOWN:
                 downX = event.getX();
@@ -47,13 +61,38 @@ public class CustomViewPager extends ViewGroup {
                 break;
             case MotionEvent.ACTION_MOVE:
                 float dx = downX - event.getX() + startScrollX;
+                if (dx > getWidth()) {
+                    dx = getWidth();
+                } else if (dx < 0) {
+                    dx = 0;
+                }
                 scrollTo((int) (dx), 0);
                 break;
             case MotionEvent.ACTION_UP:
+                velocityTracker.computeCurrentVelocity(1000, maxVelocity);
+                float xVelocity = velocityTracker.getXVelocity();
+                int scrollX = getScrollX();
+                int targetPage;
+                if (Math.abs(xVelocity) < minVelocity) {
+                    targetPage = scrollX > getWidth() / 2 ? 1 : 0;
+                } else {
+                    targetPage = xVelocity < 0 ? 1 : 0;
+                }
+                int scrollDistance = targetPage == 1 ? (getWidth() - scrollX) : -scrollX;
+                overScroller.startScroll(getScrollX(), 0, scrollDistance, 0);
+                postInvalidateOnAnimation();
                 break;
             default:
                 break;
         }
         return true;
+    }
+
+    @Override
+    public void computeScroll() {
+        if (overScroller.computeScrollOffset()) {
+            scrollTo(overScroller.getCurrX(), overScroller.getCurrY());
+            postInvalidateOnAnimation();
+        }
     }
 }
