@@ -17,11 +17,13 @@ public class CustomViewPager extends ViewGroup {
     private int startScrollX;
 
     VelocityTracker velocityTracker = VelocityTracker.obtain();
+    private final ViewConfiguration viewConfiguration;
+    private boolean scrolling;
 
     public CustomViewPager(Context context, AttributeSet attrs) {
         super(context, attrs);
         overScroller = new OverScroller(context);
-        ViewConfiguration viewConfiguration = ViewConfiguration.get(context);
+        viewConfiguration = ViewConfiguration.get(context);
         maxVelocity = viewConfiguration.getScaledMaximumFlingVelocity();
         minVelocity = viewConfiguration.getScaledMinimumFlingVelocity();
     }
@@ -44,6 +46,37 @@ public class CustomViewPager extends ViewGroup {
             left += getWidth();
             right += getWidth();
         }
+    }
+
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        if (ev.getActionMasked() == MotionEvent.ACTION_DOWN) {
+            velocityTracker.clear();
+        }
+        velocityTracker.addMovement(ev);
+
+        boolean result = false;
+        switch (ev.getActionMasked()) {
+            case MotionEvent.ACTION_DOWN:
+                scrolling = false;
+                downX = ev.getX();
+                downY = ev.getY();
+                startScrollX = getScrollX();
+                break;
+            case MotionEvent.ACTION_MOVE:
+                float dx = downX - ev.getX();
+                if (!scrolling) {
+                    if (Math.abs(dx) > viewConfiguration.getScaledPagingTouchSlop()) {
+                        scrolling = true;
+                        getParent().requestDisallowInterceptTouchEvent(true);
+                        result = true;
+                    }
+                }
+                break;
+            default:
+                break;
+        }
+        return result;
     }
 
 
