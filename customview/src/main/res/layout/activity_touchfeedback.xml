@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
+        android:fillViewport="true"
+        android:orientation="horizontal"
         android:layout_height="match_parent"
 >
     <!--<com.yatoooon.customview.touchfeedback.TouchViewGroup android:layout_width="match_parent"-->
@@ -28,20 +30,25 @@
 
     <!--</com.yatoooon.customview.touchfeedback.TouchViewGroup>-->
 
-    <com.yatoooon.customview.touchfeedback.CustomViewPager
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-        <View
+    <RelativeLayout android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+        <com.yatoooon.customview.touchfeedback.CustomViewPager
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#795548"/>
+                android:layout_height="match_parent">
 
-        <View
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#388E3C"/>
+            <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#795548"/>
 
-    </com.yatoooon.customview.touchfeedback.CustomViewPager>
+            <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#388E3C"/>
 
 
-</android.support.constraint.ConstraintLayout>
+        </com.yatoooon.customview.touchfeedback.CustomViewPager>
+    </RelativeLayout>
+
+
+</LinearLayout>

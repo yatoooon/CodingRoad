@@ -65,8 +65,9 @@ public class CustomViewPager extends ViewGroup {
                 break;
             case MotionEvent.ACTION_MOVE:
                 float dx = downX - ev.getX();
+                float dy = downY - ev.getY();
                 if (!scrolling) {
-                    if (Math.abs(dx) > viewConfiguration.getScaledPagingTouchSlop()) {
+                    if (Math.abs(dx) > viewConfiguration.getScaledPagingTouchSlop() || Math.abs(dy) > viewConfiguration.getScaledPagingTouchSlop()) {
                         scrolling = true;
                         getParent().requestDisallowInterceptTouchEvent(true);
                         result = true;
