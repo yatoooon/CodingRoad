@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        DexClassLoader classLoader = new DexClassLoader(apk.getPath(), getCacheDir().getPath(), null, null);
+        DexClassLoader classLoader = new DexClassLoader(apk.getPath(), getCacheDir().getPath(), null, getClassLoader().getParent());
         try {
             Class pluginUtilsClass = classLoader.loadClass("com.yatoooon.pluggable_plugin.Util");
             Constructor constructor = pluginUtilsClass.getDeclaredConstructor();
