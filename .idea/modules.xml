@@ -9,6 +9,8 @@
       <module fileurl="file://$PROJECT_DIR$/annotation_lib_reflection/annotation_lib_reflection.iml" filepath="$PROJECT_DIR$/annotation_lib_reflection/annotation_lib_reflection.iml" />
       <module fileurl="file://$PROJECT_DIR$/baselibrary/baselibrary.iml" filepath="$PROJECT_DIR$/baselibrary/baselibrary.iml" />
       <module fileurl="file://$PROJECT_DIR$/customview/customview.iml" filepath="$PROJECT_DIR$/customview/customview.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pluggable/pluggable.iml" filepath="$PROJECT_DIR$/pluggable/pluggable.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pluggable_plugin/pluggable_plugin.iml" filepath="$PROJECT_DIR$/pluggable_plugin/pluggable_plugin.iml" />
       <module fileurl="file://$PROJECT_DIR$/recyclerview_core/recyclerview_core.iml" filepath="$PROJECT_DIR$/recyclerview_core/recyclerview_core.iml" />
       <module fileurl="file://$PROJECT_DIR$/rxjava/rxjava.iml" filepath="$PROJECT_DIR$/rxjava/rxjava.iml" />
       <module fileurl="file://$PROJECT_DIR$/thread/thread.iml" filepath="$PROJECT_DIR$/thread/thread.iml" />
