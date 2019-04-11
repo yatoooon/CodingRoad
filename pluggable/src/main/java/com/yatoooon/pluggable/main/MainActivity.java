@@ -1,8 +1,9 @@
 package com.yatoooon.pluggable.main;
 
+import android.app.Activity;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import com.yatoooon.pluggable.R;
+import com.yatoooon.pluggable.proxy.ProxyActivity;
 import dalvik.system.DexClassLoader;
 
 import java.io.File;
@@ -12,7 +13,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         File apk = new File(getCacheDir() + "/pluggable_plugin-debug.apk");
-        if (!apk.exists()) {
+        if (!apk.exists()) {   //cache有了pluggable_plugin-debug.apk 就不再重复添复制到cache了
             try {
                 InputStream is = getAssets().open("pluggable_plugin-debug.apk");
                 int size = is.available();
@@ -99,6 +100,9 @@ public class MainActivity extends AppCompatActivity {
             Method pluginMethod = pluginUtilsClass.getDeclaredMethod("plugin");
             pluginMethod.setAccessible(true);
             pluginMethod.invoke(pluginUtils);
+
+
+            ProxyActivity.start(this, "com.yatoooon.pluggable_plugin.PluginActivity", apk.getPath());//没注册的不行  解决方案:1代理activity 2欺骗系统 3重新打包合并清单文件
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
@@ -110,6 +114,7 @@ public class MainActivity extends AppCompatActivity {
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         }
+
 
     }
 
