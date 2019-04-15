@@ -8,9 +8,9 @@
       <module fileurl="file://$PROJECT_DIR$/annotation_lib_processor/annotation_lib_processor.iml" filepath="$PROJECT_DIR$/annotation_lib_processor/annotation_lib_processor.iml" />
       <module fileurl="file://$PROJECT_DIR$/annotation_lib_reflection/annotation_lib_reflection.iml" filepath="$PROJECT_DIR$/annotation_lib_reflection/annotation_lib_reflection.iml" />
       <module fileurl="file://$PROJECT_DIR$/baselibrary/baselibrary.iml" filepath="$PROJECT_DIR$/baselibrary/baselibrary.iml" />
+      <module fileurl="file://$PROJECT_DIR$/buildSrc/buildSrc.iml" filepath="$PROJECT_DIR$/buildSrc/buildSrc.iml" />
       <module fileurl="file://$PROJECT_DIR$/customview/customview.iml" filepath="$PROJECT_DIR$/customview/customview.iml" />
       <module fileurl="file://$PROJECT_DIR$/gradle_plugin/gradle_plugin.iml" filepath="$PROJECT_DIR$/gradle_plugin/gradle_plugin.iml" />
-      <module fileurl="file://$PROJECT_DIR$/gradle_plugin_lib/gradle_plugin_lib.iml" filepath="$PROJECT_DIR$/gradle_plugin_lib/gradle_plugin_lib.iml" />
       <module fileurl="file://$PROJECT_DIR$/hotupdate/hotupdate.iml" filepath="$PROJECT_DIR$/hotupdate/hotupdate.iml" />
       <module fileurl="file://$PROJECT_DIR$/pluggable/pluggable.iml" filepath="$PROJECT_DIR$/pluggable/pluggable.iml" />
       <module fileurl="file://$PROJECT_DIR$/pluggable_plugin/pluggable_plugin.iml" filepath="$PROJECT_DIR$/pluggable_plugin/pluggable_plugin.iml" />
