@@ -8,9 +8,16 @@ repositories {
 }
 
 dependencies {
-//  implementation gradleApi()
-//  implementation localGroovy()
+  implementation gradleApi()
+  implementation localGroovy()
   implementation 'com.android.tools.build:gradle:3.2.1'
+  implementation 'commons-io:commons-io:2.6'
+  implementation 'commons-codec:commons-codec:1.10'
+  implementation 'commons-lang:commons-lang:2.6'
+  implementation 'org.javassist:javassist:3.20.0-GA'
+  implementation 'com.android.tools.build:gradle-core:2.3.3'
+  implementation 'com.android.tools.build:builder:2.3.3'
+  implementation 'dom4j:dom4j:1.6.1'
 
 }
 

@@ -24,12 +24,20 @@ android {
 
 
 
-apply plugin: 'com.yatoooon.gradle_plugin_lib'
+//apply plugin: 'com.yatoooon.gradle_plugin_lib'
+//
+//customplugin{
+//    name = 'yatoooon'
+//}
 
-customplugin{
-    name = 'yatoooon'
+
+apply plugin: 'consuming'
+
+collectConsuming {
+    enable = true
+    includePackages = ['com.yatoooon.gradle_plugin']
+    excludeFies = []
 }
-
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')

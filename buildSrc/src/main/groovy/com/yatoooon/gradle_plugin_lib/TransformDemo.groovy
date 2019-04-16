@@ -37,11 +37,13 @@ public class TransformDemo extends Transform {
 
         inputs.each {
             it.jarInputs.each {
+//                println "flie: ${it.file}"
                 File dest = outputProvider.getContentLocation(it.name, it.contentTypes, it.scopes, Format.JAR)
                 FileUtils.copyFile(it.file, dest)
             }
 
             it.directoryInputs.each {
+//                println "flie: ${it.file}"
                 File dest = outputProvider.getContentLocation(it.name, it.contentTypes, it.scopes, Format.DIRECTORY)
                 FileUtils.copyDirectory(it.file, dest)
             }
