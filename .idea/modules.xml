@@ -10,8 +10,10 @@
       <module fileurl="file://$PROJECT_DIR$/baselibrary/baselibrary.iml" filepath="$PROJECT_DIR$/baselibrary/baselibrary.iml" />
       <module fileurl="file://$PROJECT_DIR$/buildSrc/buildSrc.iml" filepath="$PROJECT_DIR$/buildSrc/buildSrc.iml" />
       <module fileurl="file://$PROJECT_DIR$/customview/customview.iml" filepath="$PROJECT_DIR$/customview/customview.iml" />
+      <module fileurl="file://$PROJECT_DIR$/design_patterns/design_patterns.iml" filepath="$PROJECT_DIR$/design_patterns/design_patterns.iml" />
       <module fileurl="file://$PROJECT_DIR$/gradle_plugin/gradle_plugin.iml" filepath="$PROJECT_DIR$/gradle_plugin/gradle_plugin.iml" />
       <module fileurl="file://$PROJECT_DIR$/hotupdate/hotupdate.iml" filepath="$PROJECT_DIR$/hotupdate/hotupdate.iml" />
+      <module fileurl="file://$PROJECT_DIR$/network/network.iml" filepath="$PROJECT_DIR$/network/network.iml" />
       <module fileurl="file://$PROJECT_DIR$/pluggable/pluggable.iml" filepath="$PROJECT_DIR$/pluggable/pluggable.iml" />
       <module fileurl="file://$PROJECT_DIR$/pluggable_plugin/pluggable_plugin.iml" filepath="$PROJECT_DIR$/pluggable_plugin/pluggable_plugin.iml" />
       <module fileurl="file://$PROJECT_DIR$/recyclerview_core/recyclerview_core.iml" filepath="$PROJECT_DIR$/recyclerview_core/recyclerview_core.iml" />
