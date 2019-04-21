@@ -8,12 +8,15 @@ public class SingletonLazyUnSafe {
 
     }
 
-    public  static SingletonLazyUnSafe getInstance() {
+    public static SingletonLazyUnSafe getInstance() {
         if (singletonLazySafe == null) {
             singletonLazySafe = new SingletonLazyUnSafe();
         }
         return singletonLazySafe;
     }
 
+    public void empty() {
+        singletonLazySafe = null;
+    }
 
 }

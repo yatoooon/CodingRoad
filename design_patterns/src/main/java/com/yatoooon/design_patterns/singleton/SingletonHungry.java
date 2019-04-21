@@ -11,4 +11,8 @@ public class SingletonHungry {
     public static SingletonHungry getInstance() {
         return singletonHungry;
     }
+
+    public void empty() {
+        singletonHungry = null;
+    }
 }

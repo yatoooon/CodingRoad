@@ -18,4 +18,8 @@ public class SingletonDoubleCheck {
         }
         return singletonDoubleCheck;
     }
+
+    public void empty() {
+        singletonDoubleCheck = null;
+    }
 }

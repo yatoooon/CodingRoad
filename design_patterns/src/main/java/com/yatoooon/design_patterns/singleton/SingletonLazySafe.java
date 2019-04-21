@@ -14,4 +14,8 @@ public class SingletonLazySafe {
         }
         return singletonLazySafe;
     }
+
+    public void empty() {
+        singletonLazySafe = null;
+    }
 }
