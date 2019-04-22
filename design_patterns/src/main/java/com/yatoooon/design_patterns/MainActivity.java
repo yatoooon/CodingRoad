@@ -7,9 +7,24 @@ import com.yatoooon.design_patterns.builder.ActualBuilder;
 import com.yatoooon.design_patterns.builder.Director;
 import com.yatoooon.design_patterns.combination.Employee;
 import com.yatoooon.design_patterns.factory.ShapeFactory;
+import com.yatoooon.design_patterns.observer.BinaryObserver;
+import com.yatoooon.design_patterns.observer.HexaObserver;
+import com.yatoooon.design_patterns.observer.OctalObserver;
+import com.yatoooon.design_patterns.observer.Subject;
 import com.yatoooon.design_patterns.proxy.Image;
 import com.yatoooon.design_patterns.proxy.ProxyImage;
+import com.yatoooon.design_patterns.responsibilitychain.AbstractLogger;
+import com.yatoooon.design_patterns.responsibilitychain.ConsoleLogger;
+import com.yatoooon.design_patterns.responsibilitychain.DebugLogger;
+import com.yatoooon.design_patterns.responsibilitychain.ErrorLogger;
 import com.yatoooon.design_patterns.singleton.*;
+import com.yatoooon.design_patterns.strategy.Context;
+import com.yatoooon.design_patterns.strategy.OperationAdd;
+import com.yatoooon.design_patterns.strategy.OperationMultiply;
+import com.yatoooon.design_patterns.strategy.OperationSubstract;
+import com.yatoooon.design_patterns.template.Cricket;
+import com.yatoooon.design_patterns.template.Football;
+import com.yatoooon.design_patterns.template.Game;
 import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity {
@@ -75,5 +90,35 @@ public class MainActivity extends AppCompatActivity {
         System.out.println();
         image.disPlay();
 
+        //7.责任链模式
+        AbstractLogger logger = new ErrorLogger(AbstractLogger.ERROR).setNextLogger(new DebugLogger(AbstractLogger.DEBUG).setNextLogger(new ConsoleLogger(AbstractLogger.INFO)));
+        logger
+                .logMessage(AbstractLogger.INFO, "This is an information.")
+                .logMessage(AbstractLogger.DEBUG, "This is a debug level information.")
+                .logMessage(AbstractLogger.ERROR, "This is an error information.");
+        //8.观察者模式
+        Subject subject = new Subject();
+        new HexaObserver(subject);
+        new OctalObserver(subject);
+        new BinaryObserver(subject);
+        Timber.d("First state change: 15");
+        subject.setState(15);
+        Timber.d("Second state change: 10");
+        subject.setState(10);
+
+        //9.策略模式
+        Context context = new Context(new OperationAdd());
+        Timber.d("10 + 5 = " + context.executeStrategy(10, 5));
+        context = new Context(new OperationSubstract());
+        Timber.d("10 - 5 = " + context.executeStrategy(10, 5));
+        context = new Context(new OperationMultiply());
+        Timber.d("10 * 5 = " + context.executeStrategy(10, 5));
+
+        //10.模板模式
+        Game game = new Cricket();
+        game.play();
+        System.out.println();
+        game = new Football();
+        game.play();
     }
 }

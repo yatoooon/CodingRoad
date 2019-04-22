@@ -17,7 +17,6 @@ public class ProxyActivity extends Activity {
 
 
     private String apkPath;
-    private Context mContext;
     private AssetManager mAssetManager;
     private Resources mResources;
 
