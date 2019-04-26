@@ -3,6 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/CodingRoad.iml" filepath="$PROJECT_DIR$/CodingRoad.iml" />
+      <module fileurl="file://$PROJECT_DIR$/aidl/aidl.iml" filepath="$PROJECT_DIR$/aidl/aidl.iml" />
+      <module fileurl="file://$PROJECT_DIR$/aidl_client/aidl_client.iml" filepath="$PROJECT_DIR$/aidl_client/aidl_client.iml" />
       <module fileurl="file://$PROJECT_DIR$/annotation/annotation.iml" filepath="$PROJECT_DIR$/annotation/annotation.iml" />
       <module fileurl="file://$PROJECT_DIR$/annotation_lib_annotations/annotation_lib_annotations.iml" filepath="$PROJECT_DIR$/annotation_lib_annotations/annotation_lib_annotations.iml" />
       <module fileurl="file://$PROJECT_DIR$/annotation_lib_processor/annotation_lib_processor.iml" filepath="$PROJECT_DIR$/annotation_lib_processor/annotation_lib_processor.iml" />
