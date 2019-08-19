@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                             xmlns:app="http://schemas.android.com/apk/res-auto"
+                                             android:layout_width="match_parent"
+                                             android:layout_height="match_parent">
+
+
+    <TextView
+            android:id="@+id/view"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:text="设置垂直偏向"
+            app:layout_constraintVertical_bias="0.3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+
+    <!--垂直方向居顶部-->
+    <TextView
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constrainedHeight="true"
+            app:layout_constraintVertical_bias="0.0"
+            android:text="dwhudwahduihawu"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+
+
+    <android.support.constraint.ConstraintLayout
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/view" android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <Button
+                android:id="@+id/sbBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="sb"
+                app:layout_constraintEnd_toStartOf="@+id/sbBtn01"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+        <Button
+                android:id="@+id/sbBtn01"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="sb01"
+                app:layout_constraintEnd_toStartOf="@+id/sbBtn02"
+                app:layout_constraintStart_toEndOf="@+id/sbBtn"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+        <Button
+                android:id="@+id/sbBtn02"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="sb02"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/sbBtn01"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+    </android.support.constraint.ConstraintLayout>
+
+</android.support.constraint.ConstraintLayout>
