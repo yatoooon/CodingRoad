@@ -17,6 +17,7 @@
       <module fileurl="file://$PROJECT_DIR$/gradle_plugin/gradle_plugin.iml" filepath="$PROJECT_DIR$/gradle_plugin/gradle_plugin.iml" />
       <module fileurl="file://$PROJECT_DIR$/hotupdate/hotupdate.iml" filepath="$PROJECT_DIR$/hotupdate/hotupdate.iml" />
       <module fileurl="file://$PROJECT_DIR$/kotlin/kotlin.iml" filepath="$PROJECT_DIR$/kotlin/kotlin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/motionlayout/motionlayout.iml" filepath="$PROJECT_DIR$/motionlayout/motionlayout.iml" />
       <module fileurl="file://$PROJECT_DIR$/network/network.iml" filepath="$PROJECT_DIR$/network/network.iml" />
       <module fileurl="file://$PROJECT_DIR$/pluggable/pluggable.iml" filepath="$PROJECT_DIR$/pluggable/pluggable.iml" />
       <module fileurl="file://$PROJECT_DIR$/pluggable_plugin/pluggable_plugin.iml" filepath="$PROJECT_DIR$/pluggable_plugin/pluggable_plugin.iml" />

@@ -102,9 +102,11 @@
             app:layout_constraintTop_toTopOf="parent"/>
 
 
+    <!--none：即使空间不够,也不换行   chain:换行均匀的组成链   aligned :换行对齐的组成链-->
     <android.support.constraint.helper.Flow
             app:constraint_referenced_ids="view1,view2,view3" android:layout_width="wrap_content"
             android:orientation="horizontal"
+            app:flow_wrapMode="none"
             android:layout_height="wrap_content"/>
 
 
