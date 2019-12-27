@@ -24,25 +24,25 @@ public class AIDLService extends Service {
     IDemandManager.Stub demandManager = new IDemandManager.Stub() {
         @Override
         public MessageBean getDemand() throws RemoteException {
-            MessageBean demand = new MessageBean("sss", 1);
+            MessageBean demand = new MessageBean("首先，看到我要敬礼", 1);
             return demand;
         }
 
         @Override
-        public void setDemandIn(MessageBean msg) throws RemoteException {
-            Log.i("aidl_server", "程序员：" + msg.toString());
+        public void setDemandIn(MessageBean msg) throws RemoteException { //客户端数据流向服务端
+            Log.i("aidl_server", "程序员setDemandIn：" + msg.toString());
         }
 
         @Override
-        public void setDemandOut(MessageBean msg) throws RemoteException {
-            Log.i("aidl_server", "程序员：" + msg.toString());
+        public void setDemandOut(MessageBean msg) throws RemoteException {//服务端数据流向客户端
+            Log.i("aidl_server", "程序员setDemandOut：" + msg.toString());  //msg必定为空
             msg.setContent("我不想听解释，下班前把所有工作都搞好！");
             msg.setLevel(5);
         }
 
         @Override
-        public void setDemanInOut(MessageBean msg) throws RemoteException {
-            Log.i("aidl_server", "程序员:" + msg.toString());
+        public void setDemanInOut(MessageBean msg) throws RemoteException {//数据互通
+            Log.i("aidl_server", "程序员setDemanInOut:" + msg.toString());
             msg.setContent("把用户交互颜色都改成粉色");
             msg.setLevel(3);
         }

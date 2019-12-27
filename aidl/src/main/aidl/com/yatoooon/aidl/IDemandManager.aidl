@@ -10,9 +10,9 @@ interface IDemandManager {
      * and return values in AIDL.
      */
      MessageBean getDemand();
-     void setDemandIn(in MessageBean msg);
-     void setDemandOut(out MessageBean msg);
-     void setDemanInOut(inout MessageBean msg);
+     void setDemandIn(in MessageBean msg); //客户端->服务端
+     void setDemandOut(out MessageBean msg);//服务端->客户端
+     void setDemanInOut(inout MessageBean msg);//客户端<->服务端
      void registerListener(IDemandListener listener);
      void unregisterListener(IDemandListener listener);
 }

@@ -17,7 +17,7 @@
             </intent-filter>
         </activity>
         <service
-                android:name=".AIDLService"
+                android:name="com.yatoooon.aidl.AIDLService"
                 android:exported="true">
             <intent-filter>
                 <action android:name="com.test.aidl" />

@@ -9,6 +9,7 @@ import android.os.IBinder;
 import android.os.RemoteException;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+
 import com.yatoooon.aidl.IDemandListener;
 import com.yatoooon.aidl.IDemandManager;
 import com.yatoooon.aidl.MessageBean;
@@ -36,7 +37,12 @@ public class MainActivity extends AppCompatActivity {
                 mIDemandManager = IDemandManager.Stub.asInterface(iBinder);
                 try {
                     mIDemandManager.registerListener(listener);
-                    mIDemandManager.setDemandIn(new MessageBean("客户端发消息了", 5));
+                    mIDemandManager.setDemandIn(new MessageBean("我绑定上你了", 5));
+                    Log.d("aidl_client", mIDemandManager.getDemand().toString());
+                    mIDemandManager.setDemandIn(new MessageBean("初次见面，失礼失礼", 1));
+                    mIDemandManager.setDemandOut(new MessageBean("测试", 1));  //这里需要服务器发
+                    mIDemandManager.setDemanInOut(new MessageBean("测试", 1));  //这个可以两边发
+
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }

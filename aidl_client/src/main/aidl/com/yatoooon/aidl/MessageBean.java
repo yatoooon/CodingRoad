@@ -72,4 +72,12 @@ public class MessageBean implements Parcelable {
             return new MessageBean[size];
         }
     };
+
+    @Override
+    public String toString() {
+        return "MessageBean{" +
+                "content='" + content + '\'' +
+                ", level=" + level +
+                '}';
+    }
 }
